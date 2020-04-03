@@ -1,2 +1,1 @@
-# react-demo
 # Demo react
