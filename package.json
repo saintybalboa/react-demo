@@ -23,12 +23,8 @@
     "ejs": "^3.0.2",
     "express": "^4.17.1",
     "react": "^16.13.1",
-<<<<<<< HEAD
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2"
-=======
-    "react-dom": "^16.13.1"
->>>>>>> dc30f591dceae3d7638fbf421dc4c6ed5397f296
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
