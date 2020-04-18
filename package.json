@@ -5,10 +5,11 @@
   "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:static": "node_modules/.bin/node-sass src/assets/scss --output src/public/css",
+    "build:static": "node_modules/.bin/node-sass src/assets/scss --output public/css",
     "build:scripts": "webpack -wd",
-    "build": "run-s build:*",
-    "dev": "nodemon --exec babel-node src/server.js"
+    "build": "run-s clean build:*",
+    "clean": "rm -rf build public",
+    "dev": "nodemon --exec node build/server.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
     "@babel/core": "^7.9.0",
     "@babel/node": "^7.8.7",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.4",

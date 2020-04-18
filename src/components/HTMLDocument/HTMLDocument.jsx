@@ -9,8 +9,8 @@ function HTMLDocument({ body }) {
             </head>
             <body>
                 <div id="root" dangerouslySetInnerHTML={{ __html: body }} />
-                <script src="/index.js"></script>
-                <script src="/vendor.js"></script>
+                <script src="/js/client.js"></script>
+                <script src="/js/vendor.js"></script>
             </body>
         </html>
     );

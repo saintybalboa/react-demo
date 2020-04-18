@@ -1,4 +1,5 @@
 import express from "express";
+import path from 'path';
 import React from "react";
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
@@ -8,7 +9,7 @@ import App from "./components/App";
 const app = express();
 
 // make public assets accessible over the network
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // handle all routes
 app.all('/*', async (req, res) => {
