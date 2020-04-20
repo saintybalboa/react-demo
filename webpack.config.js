@@ -69,11 +69,19 @@ const serverSideConfig = {
             }
         ]
     },
+<<<<<<< HEAD
     target: 'node',
     node: {
         // Need this when working with express, otherwise the build fails
         __dirname: false,
         __filename: false
+=======
+    target: "node",
+    node: {
+        // Need this when working with express, otherwise the build fails
+        __dirname: false,   // if you don't put this is, __dirname
+        __filename: false,  // and __filename return blank or /
+>>>>>>> 41042e05be7510e98e62319e7d2e52000097024a
     },
     resolve: {
                 // If multiple files share the same name but have different extensions, webpack will resolve the one with the extension listed first in the array and skip the rest.
@@ -81,4 +89,8 @@ const serverSideConfig = {
     }
 };
 
+<<<<<<< HEAD
 module.exports = [clientSideConfig, serverSideConfig];
+=======
+module.exports = [clientSideConfig,  serverSideConfig];
+>>>>>>> 41042e05be7510e98e62319e7d2e52000097024a
