@@ -4,3 +4,5 @@ import { BrowserRouter } from "react-router-dom";
 import App from './components/App';
 
 hydrate(<BrowserRouter><App /></BrowserRouter>, document.getElementById("root"));
+
+module.hot.accept();

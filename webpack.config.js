@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 const clientSideConfig = {
     entry: {
@@ -69,28 +70,77 @@ const serverSideConfig = {
             }
         ]
     },
-<<<<<<< HEAD
     target: 'node',
     node: {
         // Need this when working with express, otherwise the build fails
         __dirname: false,
         __filename: false
-=======
-    target: "node",
-    node: {
-        // Need this when working with express, otherwise the build fails
-        __dirname: false,   // if you don't put this is, __dirname
-        __filename: false,  // and __filename return blank or /
->>>>>>> 41042e05be7510e98e62319e7d2e52000097024a
     },
     resolve: {
                 // If multiple files share the same name but have different extensions, webpack will resolve the one with the extension listed first in the array and skip the rest.
         extensions: ['.js', '.jsx', '.json']
+    },
+    plugins: [
+        new webpack.HotModuleReplacementPlugin()
+    ],
+    devServer: {
+        contentBase: './dist',
+        hot: true
     }
 };
 
-<<<<<<< HEAD
-module.exports = [clientSideConfig, serverSideConfig];
-=======
-module.exports = [clientSideConfig,  serverSideConfig];
->>>>>>> 41042e05be7510e98e62319e7d2e52000097024a
+const localDevelopmentConfig = {
+    entry: {
+        // Client side javascript files bundled with React
+        vendor: ['@babel/polyfill', 'react'],
+        client: "./src/client.js",
+        html: "./index.html",
+    },/*
+    output: {
+        path: path.resolve(__dirname, './', 'dist'), // Destination folder for the client side bundled output is /dist
+        filename: '[name].js' // Saves the following bundled files to the destination folder: client.js, vendor.js
+    },*/
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                use: {
+                    loader: 'babel-loader',  // Asks bundler to use babel loader to transpile es2015 code
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react']
+                    }
+                },
+                exclude: [/node_modules/]
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    { loader: 'css-loader' },
+                    { loader: 'sass-loader' }
+                ]
+            },
+            {
+                test: /\.(js|jsx)$/,
+                use: {
+                    loader: 'react-hot-loader/webpack',
+                    options: {
+                        // This is a feature of `babel-loader` for Webpack (not Babel itself).
+                        // It enables caching results in ./node_modules/.cache/babel-loader/
+                        // directory for faster rebuilds.
+                        cacheDirectory: false
+                    }
+                },
+            },
+            {
+                test: /\.html$/,
+                loader: "file-loader?name=[name].[ext]",
+            }
+        ]
+    },
+    resolve: {
+        // If multiple files share the same name but have different extensions, webpack will resolve the one with the extension listed first in the array and skip the rest.
+        extensions: ['.js', '.jsx', '.json']
+    }
+};
+
+module.exports = [clientSideConfig, serverSideConfig];//, localDevelopmentConfig];

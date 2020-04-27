@@ -97,8 +97,13 @@ const serverSideConfig = {
 
 ## Resources
 https://sass-lang.com/
+
 https://www.javatpoint.com/why-use-sass
+
 https://www.javatpoint.com/sass-advantages-and-disadvantages
+
 https://webpack.js.org/loaders/css-loader/
+
 https://webpack.js.org/loaders/sass-loader/
+
 https://webpack.js.org/loaders/style-loader/

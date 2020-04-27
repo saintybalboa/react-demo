@@ -1,15 +1,45 @@
 # Setup
 
+This setup will guide you through the process of implementing React server-side rendering but with client-side React taking over after the page is first loaded in the browser.
+
+In order for the react web app to run, we need to install a web server and the React library. The code then needs to be transpiled and compiled using Webpack and Babel.
+
+Install Express and React dependencies:
 ```bash
-npm install @babel/register @babel/preset-env @babel/preset-react
+npm install express react
 ```
 
+Install Webpack and Babel dev dependencies:
 
 ```bash
-npm install webpack
+npm install webpack webpack-cli @babel/register @babel/preset-env @babel/preset-react --save-dev
 ```
 
-Add the following webpack config for transpiling the client side javascript:
+Create a `.babelrc` file in the root directory with the following babel configuration:
+```json
+{
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "node": "current"
+                }
+            }
+        ],
+        [
+            "@babel/preset-react"
+        ]
+    ]
+}
+```
+
+- **@babel/preset-env:** preset that allows you to use the latest JavaScript without needing to micromanage which syntax transforms. This is targeted at the current node version specified in the [.nvmrc](../../.nvmrc) file.
+
+- **@babel/preset-react:** preset that allows you to use react with jsx syntax.
+
+
+Add the following webpack config for compiling the client side javascript:
 ```js
 const clientSideConfig = {
     entry: {
@@ -41,7 +71,6 @@ const clientSideConfig = {
 };
 ```
 
-
 Add the following webpack config for transpiling the server side javascript:
 ```js
 const serverSideConfig = Object.assign({}, baseConfig, {
@@ -67,15 +96,48 @@ const serverSideConfig = Object.assign({}, baseConfig, {
             }
         ]
     },
-    target: "node", // explain why need this for server side
+    target: "node", // compile for usage in a Node.js like environment.
     resolve: {
         extensions: ['.js', '.jsx', '.json']
     }
 ```
 
-Adding target:node to prevent webpack error
-https://stackoverflow.com/questions/40959835/webpack-express-cannot-resolve-module-fs-request-dependency-is-expression
+Export both config separate to ensure webpack executes them separatley
 
 ```js
 module.exports = [clientSideConfig,  serverSideConfig];
 ```
+
+Run the webpack cli command to transpile client-side scripts to the `public/js` directory and server-side code to the `build` directory:
+
+```bash
+webpack
+```
+
+
+## Hot reloading
+
+The current setup requires us to build and a refresh the page each time we make a change. This can very time consuming for development. Using the [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) and the [react-hot-loader](https://www.npmjs.com/package/react-hot-loader) we can set up hot module replacement. This means whenever we make a change to the code, webpack will replace the module on the page without reloading.
+
+Install `webpack-dev-server` dev dependencies globally and locally:
+
+```bash
+npm install -g webpack-dev-server
+npm install webpack-dev-server react-hot-loader --save-dev
+```
+
+
+### [Tutorial part 2: Testing &#8594;](./2-testing.md)
+
+
+## Resources
+
+https://alligator.io/react/server-side-rendering/
+
+https://www.freecodecamp.org/news/server-side-rendering-your-react-app-in-three-simple-steps-7a82b95db82e/
+
+https://medium.com/@firasd/quick-start-tutorial-universal-react-with-server-side-rendering-76fe5363d6e
+
+https://webpack.js.org/concepts/targets/
+
+https://thoughtbot.com/blog/setting-up-webpack-for-react-and-hot-module-replacement
