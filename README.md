@@ -1,6 +1,8 @@
 # React demo
 
-React demo shares my journey on learning how to build a basic universal web app with react. The following areas are covered:
+React demo shares a journey on learning how to build a basic universal web app with react. The following areas are covered:
+
+- Setup for local development
 
 - Server-side rendering
 
@@ -10,9 +12,9 @@ React demo shares my journey on learning how to build a basic universal web app 
 
 - Components
 
-- Testing with Jest and Enzyme.
+- Testing with Jest and Enzyme
 
-- Global and component level styling with Sass.
+- Global and component level styling with Sass
 
 
 ## Setup

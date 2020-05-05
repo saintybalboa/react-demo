@@ -2,12 +2,12 @@
 
 [Sass](https://sass-lang.com/) will be used for styling throughout the web application. It enables the use of variables, nested rules, mixins, inline imports making it easier to manage, make changes and write less css.
 
-All styles will be defined in a `.scss` file, which are processed by Sass and compiled to css to a `.css` file so they are readable by the browser. There are two levels at which `scss` files are to be created: at the global level and component.
+All styles are defined in a `.scss` file, which are then trasnformed to css so they are readable by the browser. There are two levels at which `scss` files are to be created: at the global level and component.
 
-## Global styling
+### Global styling
 Shared styling such as typhography, colours and layouts are stored in a global file. The transpiled global file is injected into the head when the page is served by the browser.
 
-## Component styling
+### Component styling
 The majority of react components will each have a dedicated `.scss` file to make it easier to find and manage styles that are directly related. These files are imported within the component `.jsx` file and applied by javascript in the browser. Styles applied with javascript does have it's pitfalls:
 
 - The styles do not get rendered in the browser when javascript is disabled.
@@ -26,12 +26,12 @@ Install the following dev dependencies:
 npm install node-sass sass-loader css-loader style-loader --save-dev
 ```
 
-Run the Sass compiler to convert scss to css in `public/css/index.css`:
+Run the Sass compiler to convert the global scss file to `public/css/index.css`:
 ```bash
 node_modules/.bin/node-sass src/assets/scss --output src/public/css
 ```
 
-Importing `.scss` files within the component `.jsx` file will cause the javascript runtime to throw an error because it doesn't recognise the syntax. To solve this problem we need to configure webpack to:
+Importing `.scss` files within the component `.jsx` file will cause the javascript runtime to throw an error because it doesn't recognise the syntax. To solve this problem we need to:
 
 - Run the Sass compiler to convert `scss` to `css`.
 
@@ -41,13 +41,15 @@ Importing `.scss` files within the component `.jsx` file will cause the javascri
 
 This can be achieved by using the following webpack [loaders](https://webpack.js.org/loaders/):
 
-- **style-loader':** Injects CSS into the DOM. This is exists only in the browser, therefore it must only be applied to the client webpack config.
+- **style-loader:** Injects CSS into the DOM. This is exists only in the browser, therefore it must only be applied to the client webpack config.
 
-- **css-loader:** Interprets @import/url() as import/require() within the js and resolves them.
+- **css-loader:** Interprets `@import/url()` as `import/require()` within the js and resolves them.
 
 - **sass-loader:** Loads a Sass/SCSS file and compiles it to CSS using `node-sass`.
 
-Configure webpack to client  `webpack.config.js`:
+- **mini-css-extract-plugin:** Extracts all component level css into a static css file. The static css file can be served by the web browser when javscript is disabled.
+
+Update `webpack.prod.config.js` with the following configuration to compile sass imports at the component level:
 
 ```js
 const clientSideConfig = {
@@ -67,23 +69,16 @@ const clientSideConfig = {
     },
     ...
 };
-```
 
-and server side builds in
-```js
 const serverSideConfig = {
     ...
-    node: {
-        // Need this when working with express, otherwise the build fails
-        __dirname: false,
-        __filename: false
-    },
     module: {
         rules: [
             ...
             {
                 test: /\.scss$/,
                 use: [
+                    { loader: MiniCssExtractPlugin.loader },
                     { loader: 'css-loader' }, // Interprets @import/url() as import/require() within the js and resolves them
                     { loader: 'sass-loader' } // Loads a Sass/SCSS file and compiles it to CSS.
                 ],
@@ -91,8 +86,49 @@ const serverSideConfig = {
             }
         ]
     },
-    target: "node"
+    ...
+    plugins: [
+        new MiniCssExtractPlugin({
+            // Save to a static css file in the public directory
+            filename: "../public/css/components.css"
+        })
+    ]
 };
+```
+
+### Local development
+For debugging purposes, in local development we're running the server directly from the source code i.e. the `src/server.js`. This is executed using `babel-node`, which will through an error because it doesn't know how to handle sass imports in js. Add the following plugin to the babel configuration to [.babelrc](../../.babelrc) to resolve sass imports at runtime:
+
+Install dev dependency:
+```bash
+npm install babel-plugin-postcss-css-modules --save-dev
+```
+
+Create the `postcss.config.js` postcss configuration file:
+```js
+module.exports = (ctx) => ({
+    plugins: [
+      require('postcss-modules')({
+        getJSON: ctx.extractModules || (() => {}),
+      }),
+    ],
+});
+```
+
+Add plugin to the babel configuration:
+```json
+{
+    ...
+    "plugins": [
+        ...
+        ["postcss-css-modules", { "extensions": [".scss"] }]
+    ]
+}
+```
+
+
+```bash
+babel-node ./src/server.js
 ```
 
 ## Resources
@@ -107,3 +143,9 @@ https://webpack.js.org/loaders/css-loader/
 https://webpack.js.org/loaders/sass-loader/
 
 https://webpack.js.org/loaders/style-loader/
+
+https://webpack.js.org/plugins/mini-css-extract-plugin/
+
+https://www.npmjs.com/package/babel-plugin-postcss-css-modules
+
+https://stackoverflow.com/questions/46865880/react-16-warning-expected-server-html-to-contain-a-matching-div-in-div-due

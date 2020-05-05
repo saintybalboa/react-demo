@@ -1,10 +1,12 @@
 import express from "express";
 import path from 'path';
 import React from "react";
-import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom';
-import HTMLDocument from './components/HTMLDocument';
+import { HelmetProvider } from 'react-helmet-async';
 import App from "./components/App";
+import template from './template';
+import config from './config';
 
 const app = express();
 
@@ -13,25 +15,24 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // handle all routes
 app.all('/*', async (req, res) => {
-    const context = {};
+    const routerContext = {};
+    const helmetContext = {};
 
     // render react components to the HTML with attributes required for interactive markup
-    const reactDom = renderToString(
-        <StaticRouter context={context} location={req.url}>
-            <App />
+    const markup = renderToString(
+        <StaticRouter context={routerContext} location={req.url}>
+            <HelmetProvider context={helmetContext}>
+                <App />
+            </HelmetProvider>
         </StaticRouter>
     );
 
-    // render the static html document with the react dom in the body
-    const htmlDocument = renderToStaticMarkup(
-        <HTMLDocument body={reactDom} />
-    );
+    const { helmet } = helmetContext;
 
-    // Prepend the html document with <!doctype html> here as react throws an error when it is embedded in a component
-    res.status(200).send(`<!DOCTYPE html>${htmlDocument}`);
+    res.status(200).send(template(markup, helmet, config.scripts, config.styles));
 });
 
-const port = process.env.PORT || 3000;
+const port = 4040;
 const host = 'localhost';
 
 // Start the server

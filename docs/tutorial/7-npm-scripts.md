@@ -15,11 +15,14 @@ Add the following scripts to package.json
     ...
     "scripts": {
         "test": "jest test --env=jsdom",
-        "build:static": "node_modules/.bin/node-sass src/assets/scss --output public/css",
-        "build:scripts": "webpack -wd",
+        "build:static": "node_modules/.bin/node-sass src/assets/scss/index.scss --output public/css",
+        "build:scripts": "webpack --config webpack.prod.config.js",
         "build": "run-s clean build:*",
         "clean": "rm -rf build public",
-        "dev": "nodemon --exec node build/server.js"
+        "dev:server-start": "nodemon --exec babel-node src/server.js",
+        "dev:client-start": "webpack-dev-server --config webpack.dev.config.js",
+        "dev": "run-s dev:*",
+        "start": "node build/server.js"
     }
 }
 ```
