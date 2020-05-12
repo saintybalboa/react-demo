@@ -266,7 +266,7 @@ Add the following script entry to `package.json`:
     ...
     "scripts": {
         ...
-        "prod:start": "node build/server.js"
+        "start": "node build/server.js"
     }
 }
 ```
@@ -293,7 +293,7 @@ Add as a script entry to `package.json`:
 {
     ...
     "scripts": {
-        "dev:server-start": "nodemon --exec babel-node src/server.js"
+        "dev:server": "nodemon --exec babel-node src/server.js"
     }
 }
 ```
