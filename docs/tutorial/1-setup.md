@@ -374,6 +374,27 @@ module.exports = {
 };
 ```
 
+Enable hot reloading in `src/client.js`:
+```js
+...
+// Hot reload is only enabled when running the web-pack-dev server for local frontend development
+const renderMethod = module.hot ? render : hydrate;
+
+renderMethod(
+    <BrowserRouter>
+        <HelmetProvider>
+            <App />
+        </HelmetProvider>
+    </BrowserRouter>,
+    document.getElementById("root")
+);
+
+if (module.hot) {
+    // Accept updates for the given dependencies and fire a callback to react to those updates.
+    module.hot.accept();
+}
+```
+
 Add the following script entry to `package.json`:
 ```bash
 {
