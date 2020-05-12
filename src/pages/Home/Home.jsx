@@ -7,7 +7,7 @@ export default function Home() {
             <Helmet>
                 <title>Home</title>
             </Helmet>
-            <h1>React demo marty sian</h1>
+            <h1>React demo</h1>
         </>
     );
 }

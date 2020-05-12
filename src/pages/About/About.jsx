@@ -8,7 +8,7 @@ export default function About() {
             <Helmet>
                 <title>About</title>
             </Helmet>
-            <h1>About me</h1>
+            <h1>About</h1>
             <Button />
         </>
     );
