@@ -3,7 +3,7 @@ const template = require("./src/template").default;
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const config = require('./src/config');
+const config = require('./src/config').default;
 
 module.exports = {
     mode: "development",

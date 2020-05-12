@@ -1,13 +1,11 @@
 # Setup
 
-This setup includes implementing React server-side rendering with client-side React taking over in the browser.
-
 Install Express and React dependencies:
 ```bash
 npm install express react
 ```
 
-Create `src/config.js` to hold configuration:
+Create `src/config.js` with the following shared configuration:
 ```js
 export default {
     app: {
@@ -17,7 +15,7 @@ export default {
 };
 ```
 
-Create `src/templates/HTMLDocument` as a template for building a static html page:
+Create `src/templates/HTMLDocument.jsx`:
 ```js
 import React from 'react';
 
@@ -38,14 +36,14 @@ function HTMLDocument({ markup, scripts }) {
 export default HTMLDocument;
 ```
 
-Create `src/template.js` to generate the static html using the `HTMLDocument`:
+Create `src/template.js`:
 ```js
 import React from "react";
 import { renderToStaticMarkup } from 'react-dom/server';
 import HTMLDocument from './components/HTMLDocument';
 
 export default function(markup, scripts) {
-    // render the static html document
+    // Generate the static html document
     const htmlDocument = renderToStaticMarkup(
         <HTMLDocument
             markup={markup}
@@ -53,12 +51,12 @@ export default function(markup, scripts) {
         />
     );
 
-    // Prepend the html document with <!doctype html> here as react throws an error when it is embedded in a component
+    // <!doctype html> syntax is invalid inside a react component
     return `<!DOCTYPE html>${htmlDocument}`;
 }
 ```
 
-Create `src/server.js` to run the application server and render pages using the static html generatein `template.js`:
+Create `src/server.js`:
 ```js
 import express from "express";
 import path from 'path';
@@ -75,35 +73,39 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // handle all routes
 app.all('/*', async (req, res) => {
-    // render react components to the HTML with attributes required for interactive markup
+    // Generate the interactive html markup for react on the client
     const markup = renderToString(<App />);
 
+    // Render the static html page
     res.status(200).send(template(markup, config.scripts));
 });
 
 const port = 4040;
 const host = 'localhost';
 
-// Start the server
+// Start the application server
 const server = app.listen(port, host);
 server.on('listening', () => console.log(`Server started at http://${host}:${port}`));
 ```
 
-Create `src/client.js` to hydrate server-side rendered react components:
+Create `src/client.js`:
 ```js
 import React from "react";
 import { hydrate } from "react-dom";
 import App from './components/App';
 
+// Client side react hydrates server-side rendered html attaching event listeners s
 hydrate(<App />, document.getElementById("root"));
 ```
 
+### Configure Babel
+
+Install dependencies:
 ```bash
 npm install @babel/register @babel/preset-env @babel/preset-react --save-dev
 ```
 
-### Configuring Babel
-Create a `.babelrc` file in the root directory with the following babel configuration:
+Create `.babelrc` with the following:
 ```json
 {
     "presets": [
@@ -125,35 +127,80 @@ Create a `.babelrc` file in the root directory with the following babel configur
 }
 ```
 
-- **@babel/preset-env:** preset that allows you to use the latest JavaScript without needing to micromanage which syntax transforms. This is targeted at the current node version specified in the [.nvmrc](../../.nvmrc) file.
+- **@babel/preset-env:** Transpile the latest javascript syntax to the targeted node version in [.nvmrc](../../.nvmrc).
 
-- **@babel/preset-react:** preset that allows you to use react with jsx syntax.
+- **@babel/preset-react:** Accomodate React with JSX syntax.
 
-- **@babel/plugin-proposal-object-rest-spread:** plugin for transpiling [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+- **@babel/plugin-proposal-object-rest-spread:** Cater for [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
 
 
-Install `nodemon`:
-```bash
-npm instal nodemon
-```
+### Configure Webpack
 
-### Configuring Webpack
-In production for better performance we want transpile the code to another directory and start the server. using Webpack and Babel.
-
-Install Webpack and Babel dev dependencies:
+Install the following dependencies:
 ```bash
 npm install -g webpack webpack-cli
-```
-
-```bash
 npm install webpack webpack-cli --save-dev
 ```
 
-Create a `webpack.prod.config.js` file in the root directory. This file will be used compile the code for production.
-
-Add the following webpack config for compiling the client side javascript to the `public` directory:
+Create `webpack.client.config.js`:
 ```js
-const clientSideConfig = {
+const path = require('path');
+
+module.exports = {
+    entry: {
+        // Server side javascript file (entry point for starting the express server)
+        server: ['./src/server.js']
+    },
+    output: {
+        path: path.resolve(__dirname, './', 'build'), // Destination for the server side bundled output is under ./build
+        filename: '[name].js' // Saves the following bundled file to the destination folder
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)$/,
+                use: {
+                    loader: 'babel-loader', // asks bundler to use babel loader to transpile es2015 code
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react']
+                    }
+                },
+                exclude: [/node_modules/]
+            }
+        ]
+    },
+    target: "node", // compile for usage in a Node.js like environment.
+    resolve: {
+        extensions: ['.js', '.jsx', '.json']
+    }
+};
+```
+
+Add the following script entry to `package.json`:
+```bash
+{
+    ...
+    "scripts": {
+        ...
+        "build:client": "webpack --config webpack.client.config.js"
+    }
+}
+```
+
+Compile the client side scripts:
+```bash
+npm run build:client
+```
+
+Validate the following script files were created in `public/js`:
+- client.js
+- vendor.js
+
+Create `webpack.server.config.js`:
+```js
+const path = require('path');
+
+module.exports = {
     entry: {
         // Client side javascript files bundled with React
         vendor: ['@babel/polyfill', 'react'],
@@ -184,56 +231,7 @@ const clientSideConfig = {
 };
 ```
 
-Add the following webpack config for transpiling the server side javascript to a `build` directory:
-
-```js
-const serverSideConfig = {
-    entry: {
-        // Server side javascript file (entry point for starting the express server)
-        server: ['./src/server.js']
-    },
-    output: {
-        path: path.resolve(__dirname, './', 'build'), // Destination for the server side bundled output is under ./build
-        filename: '[name].js' // Saves the following bundled file to the destination folder
-    },
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/,
-                use: {
-                    loader: 'babel-loader', // asks bundler to use babel loader to transpile es2015 code
-                    options: {
-                        presets: ['@babel/preset-env', '@babel/preset-react']
-                    }
-                },
-                exclude: [/node_modules/]
-            }
-        ]
-    },
-    target: "node", // compile for usage in a Node.js like environment.
-    resolve: {
-        extensions: ['.js', '.jsx', '.json']
-    }
-};
-```
-
-Export configs to ensure webpack executes them separatley:
-```js
-module.exports = [clientSideConfig, serverSideConfig];
-```
-
-Run webpack:
-```bash
-webpack --config webpack.prod.config.js
-```
-
-This generate a `public/js` directory with the following scripts:
-- client.js
-- vendor.js
-
-These will need to be added as a scripts rendered server-side to allow react to work in the browser.
-
-We've already setup our template to iterate over scripts defined in `config.js` and generate the script tags. Add the scripts to `src/config.js`:
+Add the script uris to `src/config.js`:
 ```js
 export default {
     ...
@@ -244,7 +242,53 @@ export default {
 };
 ```
 
-Add a script entry to `package.json` for starting the server in production:
+Add the following script entry to `package.json`:
+```bash
+{
+    ...
+    "scripts": {
+        ...
+        "build:server": "webpack --config webpack.server.config.js"
+    }
+}
+```
+
+Compile the application server code:
+```bash
+npm run build:server
+```
+
+Validate `server.js` exists in the `build` directory.
+
+Add the following script entry to `package.json`:
+```bash
+{
+    ...
+    "scripts": {
+        ...
+        "prod:start": "node build/server.js"
+    }
+}
+```
+
+Start the application server:
+```bash
+npm run start
+```
+
+
+## Local development
+Each time we make a change to the codebase we need to build and a refresh the webpage, which can be very time consuming for local development.
+
+### Backend development
+Use nodemon to restart the application server each time a change is made to the code.
+
+Install `nodemon`:
+```bash
+npm install nodemon -g
+```
+
+Add as a script entry to `package.json`:
 ```bash
 {
     ...
@@ -254,24 +298,13 @@ Add a script entry to `package.json` for starting the server in production:
 }
 ```
 
-Startup the application server:
+Startup the application server for local development:
 ```bash
-npm run dev:server-start
+npm run dev:server
 ```
 
-Add a script entry to `package.json` for starting the server in development:
-```bash
-{
-    ...
-    "scripts": {
-        "start": "node build/server.js"
-    }
-}
-```
-
-
-## Local development
-Each time we make a change to the codebase we need to build and a refresh the webpage, which can be very time consuming for local  development. Using the [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) with [react-hot-loader](https://www.npmjs.com/package/react-hot-loader) we can speed up local development. Webpack dev server is a mini node express server that listens to when files were changed, and triggers events such as webpack builds and browser reloads. We are using the hot module replacement plugin, so that whenever we make a change to the code, webpack will replace the module on the page without reloading it in the browser. This does mean that for local development our webpack server will be used to serve our page NOT the react demo application server.
+### Frontend development
+Using the [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) with [react-hot-loader](https://www.npmjs.com/package/react-hot-loader) we can speed up local development. Webpack dev server (a mini node express server) listens for file changes and triggers events such as webpack builds and page reloads. The hot module replacement plugin replaces the module within the page without reloading the entire page in the browser. This does mean that for local development our webpack server will be used to serve our page NOT the react demo application server.
 
 Install `webpack-dev-server` and `react-hot-loader` dependencies:
 ```bash
@@ -301,12 +334,6 @@ module.exports = {
         host: 'localhost',
         compress: true,
         port: 4040,
-        proxy: {
-            // Proxy all client-side api requests from the webpack dev server to the application server in local development
-            '/api': 'http://localhost:4040',
-            //'/js/*': 'http://localhost:4040/js/',
-            '/css': 'http://localhost:4040'
-        },
         historyApiFallback: true, // Use the HTML5 History API to forward all routes to index.html page
         disableHostCheck: true, // Allow any domain hosted on this machine to be used
         hot: true, // Enable hot reloads
@@ -332,10 +359,10 @@ module.exports = {
                 test: /\.(js|jsx)$/,
                 include: [path.resolve(__dirname, "src")],
                 use: [
-                {
-                    loader: "babel-loader",
-                    options: { cacheDirectory: false }
-                }
+                    {
+                        loader: "babel-loader",
+                        options: { cacheDirectory: false }
+                    }
                 ]
             }
         ]
@@ -347,20 +374,20 @@ module.exports = {
 };
 ```
 
-Add a script entry to `package.json` for starting the webpack dev server in development:
+Add the following script entry to `package.json`:
 ```bash
 {
     ...
     "scripts": {
         ...
-        "dev:client-start": "webpack-dev-server --config webpack.dev.config.js"
+        "dev:client": "webpack-dev-server --config webpack.dev.config.js"
     }
 }
 ```
 
-Startup the webpack dev server and the application server in local development:
+Start the webpack dev server:
 ```bash
-npm run dev
+npm run dev:client
 ```
 
 #### [Tutorial part 2: Testing &#8594;](./2-testing.md)

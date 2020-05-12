@@ -1,9 +1,10 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Route, Switch, NavLink } from 'react-router-dom';
+import './App.scss'; // Order of import affects order of styles imported
 import Home from '../../pages/Home';
 import About from '../../pages/About';
-import './App.scss';
+
 
 function App() {
     return (
@@ -13,8 +14,8 @@ function App() {
                 titleTemplate="React Demo - %s"
                 titleAttributes={{itemprop: "name", lang: "en"}}
                 meta={[
-                    {name: "description", content: "React demo shares a journey on learning how to build a basic universal web app with react"},
-                    {name: "viewport", content: "width=device-width, initial-scale=1"},
+                    {name: "description", content: "React demo is a basic universal web app."},
+                    {name: "viewport", content: "width=device-width, initial-scale=1"}
                 ]}
             />
             <ul>

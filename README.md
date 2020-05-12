@@ -1,21 +1,6 @@
 # React demo
 
-React demo shares a journey on learning how to build a basic universal web app with react. The following areas are covered:
-
-- Setup for local development
-
-- Server-side rendering
-
-- Client-side rendering
-
-- Routing
-
-- Components
-
-- Testing with Jest and Enzyme
-
-- Global and component level styling with Sass
-
+React demo is a universal web app built with react.
 
 ## Setup
 
@@ -36,17 +21,31 @@ Build assets:
 npm run build
 ```
 
-Start local development server:
+Start the application server:
 ```bash
-npm run dev
+npm run start
 ```
-
-Open up a web browser and visit: http://localhost:3000/
 
 
 ## Tutorial
 
-The [tutorial](./docs/tutorial/1-setup.md) assumes you have basic knowledge about react and atleast a basic understanding of the difference between cliet-side and server-side rendering. There are links to more in depth articles along the way.
+This tutorial takes you through the process of building a react universal web app. It assumes that you have some basic knowledge of React and JavaScript. In this tutorial, the following areas are covered:
+
+- Setup for local development
+
+- Server-side rendering
+
+- Client-side rendering
+
+- Routing
+
+- Components
+
+- Testing with Jest and Enzyme
+
+- Global and component level styling with Sass
+
+ There are links to more in depth articles along the way.
 
 ### [Start the tutorial &#8594;](./docs/tutorial/1-setup.md)
 
