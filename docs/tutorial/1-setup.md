@@ -7,7 +7,7 @@ This section sets up a react project to run in both development and production. 
 - Nodemon
 - React hot reloading
 
-Generate a [package.json](https://docs.npmjs.com/creating-a-package-json-file) file to:
+Initialise [package.json](https://docs.npmjs.com/creating-a-package-json-file) to:
 - List project dependencies
 - Manage automated scripts
 
