@@ -8,7 +8,7 @@ This section sets up a react project to run in both development and production. 
 - React hot reloading
 
 Generate a [package.json](https://docs.npmjs.com/creating-a-package-json-file) file to:
-- Lists project dependencies
+- List packages the project depends on
 - Manage automated scripts
 
 ```bash
