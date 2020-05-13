@@ -2,7 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    mode: "production",
+    mode: 'production',
     entry: {
         // Server side javascript file (entry point for starting the express server)
         server: ['./src/server.js']
@@ -47,7 +47,7 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
           // Save to a static css file in the public directory
-          filename: "../public/css/index.css"
+          filename: '../public/css/index.css'
         })
     ]
 };

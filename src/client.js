@@ -13,7 +13,7 @@ renderMethod(
             <App />
         </HelmetProvider>
     </BrowserRouter>,
-    document.getElementById("root")
+    document.getElementById('root')
 );
 
 if (module.hot) {

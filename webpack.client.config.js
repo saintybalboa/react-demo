@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    mode: "production",
+    mode: 'production',
     entry: {
         // Client side javascript files bundled with React
         vendor: ['@babel/polyfill', 'react'],
@@ -34,7 +34,7 @@ module.exports = {
             }
         ]
     },
-    target: "web", // compile for usage in the browser, catering for use of window and document objects
+    target: 'web', // compile for usage in the browser, catering for use of window and document objects
     resolve: {
         // If multiple files share the same name but have different extensions, webpack will resolve the one with the extension listed first in the array and skip the rest.
         extensions: ['.js', '.jsx', '.json']

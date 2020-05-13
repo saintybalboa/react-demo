@@ -1,17 +1,18 @@
-require("@babel/register"); // Required to transpile React code in template.js
-const template = require("./src/template").default;
-const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+require('@babel/register'); // Required to transpile React code in template.js
+const template = require('./src/template').default;
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = require('./src/config').default;
 
+// Configuration for webpack-dev-server
 module.exports = {
-    mode: "development",
-    entry: ["react-hot-loader/patch", "./src/client.js"],
+    mode: 'development',
+    entry: ['react-hot-loader/patch', './src/client.js'],
     output: {
-        path: path.resolve(__dirname, "dist"),
-        publicPath: "/",
-        filename: "[name].bundle.js"
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
+        filename: '[name].bundle.js'
     },
     devtool: 'inline-source-map', // returns error details (e.g. line no.) from the source file not the file bundled by webpack
     devServer: {
@@ -47,10 +48,10 @@ module.exports = {
         rules: [
         {
             test: /\.(js|jsx)$/,
-            include: [path.resolve(__dirname, "src")],
+            include: [path.resolve(__dirname, 'src')],
             use: [
             {
-                loader: "babel-loader",
+                loader: 'babel-loader',
                 options: { cacheDirectory: false }
             }
             ]

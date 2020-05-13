@@ -54,7 +54,7 @@ export default HTMLDocument;
 
 Create `src/template.js`:
 ```js
-import React from "react";
+import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import HTMLDocument from './components/HTMLDocument';
 
@@ -74,11 +74,11 @@ export default function(markup, scripts) {
 
 Create `src/server.js`:
 ```js
-import express from "express";
+import express from 'express';
 import path from 'path';
-import React from "react";
+import React from 'react';
 import { renderToString } from 'react-dom/server';
-import App from "./components/App";
+import App from './components/App';
 import template from './template';
 import config from './config';
 
@@ -106,12 +106,12 @@ server.on('listening', () => console.log(`Server started at http://${host}:${por
 
 Create `src/client.js`:
 ```js
-import React from "react";
-import { hydrate } from "react-dom";
+import React from 'react';
+import { hydrate } from 'react-dom';
 import App from './components/App';
 
 // Client side react hydrates server-side rendered html attaching event listeners s
-hydrate(<App />, document.getElementById("root"));
+hydrate(<App />, document.getElementById('root'));
 ```
 
 ### Configure Babel
@@ -269,7 +269,7 @@ Add the following script entry to `package.json`:
 }
 ```
 
-Compile the application server code:
+Compile the application server:
 ```bash
 npm run build:server
 ```
@@ -294,7 +294,7 @@ npm run start
 
 
 ## Local development
-Each time we make a change to the codebase we need to build and a refresh the webpage, which can be very time consuming for local development.
+
 
 ### Backend development
 Use nodemon to restart the application server each time a change is made to the code.
@@ -320,7 +320,13 @@ npm run dev:server
 ```
 
 ### Frontend development
-Using the [webpack-dev-server](https://webpack.js.org/configuration/dev-server/) with [react-hot-loader](https://www.npmjs.com/package/react-hot-loader) we can speed up local development. Webpack dev server (a mini node express server) listens for file changes and triggers events such as webpack builds and page reloads. The hot module replacement plugin replaces the module within the page without reloading the entire page in the browser. This does mean that for local development our webpack server will be used to serve our page NOT the react demo application server.
+Each code change requires a rebuild and a page refresh, which slows down frontend development. Speed up frontend development by utilising the following:
+
+- [webpack-dev-server](https://webpack.js.org/configuration/dev-server/): A mini express server that listens for file changes to trigger an automated rebuild and page reload.
+
+- [react-hot-loader](https://www.npmjs.com/package/react-hot-loader): A hot module replacemet plugin that refreshes the changed module within the page without refreshing the entire page.
+
+> Important: Webpack dev server serves the page in frontend development NOT the application server.
 
 Install `webpack-dev-server` and `react-hot-loader` dependencies:
 ```bash
@@ -328,22 +334,23 @@ npm install -g webpack-dev-server
 npm install webpack-dev-server react-hot-loader html-webpack-plugin --save-dev
 ```
 
-Create a `webpack.dev.config.js` file in the root directory. This file will be used to run `webpack-dev-server` in local development:
+Create `webpack.dev.config.js`
 
 ```js
-require("@babel/register"); // Required to transpile React code in template.js
-const template = require("./src/template").default;
-const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+require('@babel/register'); // Required to transpile React code in template.js
+const template = require('./src/template').default;
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+// Configuration for webpack-dev-server
 module.exports = {
-    mode: "development",
-    entry: ["react-hot-loader/patch", "./src/client.js"],
+    mode: 'development',
+    entry: ['react-hot-loader/patch', './src/client.js'],
     output: {
-        path: path.resolve(__dirname, "dist"),
-        publicPath: "/",
-        filename: "[name].bundle.js"
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
+        filename: '[name].bundle.js'
     },
     devtool: 'inline-source-map', // returns error details (e.g. line no.) from the source file not the file bundled by webpack
     devServer: {
@@ -373,10 +380,10 @@ module.exports = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                include: [path.resolve(__dirname, "src")],
+                include: [path.resolve(__dirname, 'src')],
                 use: [
                     {
-                        loader: "babel-loader",
+                        loader: 'babel-loader',
                         options: { cacheDirectory: false }
                     }
                 ]
@@ -402,7 +409,7 @@ renderMethod(
             <App />
         </HelmetProvider>
     </BrowserRouter>,
-    document.getElementById("root")
+    document.getElementById('root')
 );
 
 if (module.hot) {
