@@ -31,21 +31,16 @@ npm run start
 
 This tutorial takes you through the process of building a react universal web app. It assumes that you have some basic knowledge of React and JavaScript. In this tutorial, the following areas are covered:
 
-- Setup for local development
+- Setup
 
 - Server-side rendering
 
 - Client-side rendering
 
-- Routing
+- Styling
 
-- Components
+- Testing
 
-- Testing with Jest and Enzyme
-
-- Global and component level styling with Sass
-
- There are links to more in depth articles along the way.
 
 ### [Start the tutorial &#8594;](./docs/tutorial/1-setup.md)
 

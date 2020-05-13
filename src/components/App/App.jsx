@@ -1,7 +1,7 @@
+import './App.scss'; // Order of import affects order of styles imported
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Route, Switch, NavLink } from 'react-router-dom';
-import './App.scss'; // Order of import affects order of styles imported
 import Home from '../../pages/Home';
 import About from '../../pages/About';
 

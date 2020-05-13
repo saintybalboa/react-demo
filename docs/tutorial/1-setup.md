@@ -1,19 +1,19 @@
 # Setup
 
-This section sets up a react project to run in both development and production. You will learn the following:
+This part of the tutorial sets up the react demo project.
+
+This sets up the following:
 - React server-side rendering
 - React client-side rendering
 - Webpack
 - Nodemon
 - React hot reloading
 
-Initialise [package.json](https://docs.npmjs.com/creating-a-package-json-file) to:
+The react demo project requires a `package.json` to:
 - List project dependencies
 - Manage automated scripts
 
-```bash
-npm init
-```
+Follow the instructions for creating a package.json: https://docs.npmjs.com/creating-a-package-json-file
 
 Install Express and React dependencies:
 ```bash
@@ -295,13 +295,13 @@ npm run start
 
 ## Local development
 
-
 ### Backend development
 Use nodemon to restart the application server each time a change is made to the code.
 
 Install `nodemon`:
 ```bash
 npm install nodemon -g
+npm install nodemon -save-dev
 ```
 
 Add as a script entry to `package.json`:
@@ -326,7 +326,7 @@ Each code change requires a rebuild and a page refresh, which slows down fronten
 
 - [react-hot-loader](https://www.npmjs.com/package/react-hot-loader): A hot module replacemet plugin that refreshes the changed module within the page without refreshing the entire page.
 
-> Important: Webpack dev server serves the page in frontend development NOT the application server.
+> Important: The webpack dev server delivers the page; The application server does NOT. Therefore, content is rendered client-side only.
 
 Install `webpack-dev-server` and `react-hot-loader` dependencies:
 ```bash
@@ -338,10 +338,11 @@ Create `webpack.dev.config.js`
 
 ```js
 require('@babel/register'); // Required to transpile React code in template.js
-const template = require('./src/template').default;
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const config = require('./src/config').default;
+const template = require('./src/template').default;
 
 // Configuration for webpack-dev-server
 module.exports = {
@@ -373,7 +374,7 @@ module.exports = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(), // Refreshes the html changes without reloading the page in browser
         new HtmlWebpackPlugin({
-            templateContent: template({}, '/', '')
+            templateContent: template('', [])
         })
     ],
     module: {
@@ -434,7 +435,8 @@ Start the webpack dev server:
 npm run dev:client
 ```
 
-#### [Tutorial part 2: Testing &#8594;](./2-testing.md)
+
+#### [Tutorial part 2: Styling &#8594;](./2-styling.md)
 
 
 ## Resources

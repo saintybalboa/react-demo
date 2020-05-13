@@ -1,9 +1,9 @@
 require('@babel/register'); // Required to transpile React code in template.js
-const template = require('./src/template').default;
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = require('./src/config').default;
+const template = require('./src/template').default;
 
 // Configuration for webpack-dev-server
 module.exports = {

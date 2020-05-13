@@ -26,9 +26,9 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    { loader: MiniCssExtractPlugin.loader },
-                    { loader: 'css-loader' },
-                    { loader: 'sass-loader' },
+                    { loader: MiniCssExtractPlugin.loader }, // Extracts css into a file that can be served by the web browser when js is disabled.
+                    { loader: 'css-loader' }, // Interprets @import/url() as import/require() within the js and resolves them
+                    { loader: 'sass-loader' } // Loads a Sass/SCSS file and compiles it to CSS.
                 ],
                 exclude: [/node_modules/]
             }

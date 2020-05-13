@@ -1,1 +1,8 @@
-@import '../../assets/scss/index.scss';
+@import '../../assets/scss/variables';
+
+body {
+    font-family: $font-family;
+    color: $color;
+    background-color: $background;
+    font-size: $font-size;
+}
