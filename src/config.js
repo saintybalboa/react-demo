@@ -5,7 +5,7 @@ export default {
         title: 'React Demo',
     },
     styles: [
-        { href: "/css/index.css", noscript: true }
+        { href: '/css/index.css', noscript: true }
     ],
     scripts: [
         '/js/client.js',
