@@ -1,12 +1,28 @@
 # Setup
 
+This section sets up a react project to run in both development and production. You will learn the following:
+- React server-side rendering
+- React client-side rendering
+- Webpack
+- Nodemon
+- React hot reloading
+
+Generate a [package.json](https://docs.npmjs.com/creating-a-package-json-file) file to:
+- Lists project dependencies
+- Manage automated scripts
+
+```bash
+npm init
+```
+
 Install Express and React dependencies:
 ```bash
 npm install express react
 ```
 
-Create `src/config.js` with the following shared configuration:
+Create `src/config.js`:
 ```js
+// Shared configuration
 export default {
     app: {
         title: 'React Demo',
@@ -187,7 +203,7 @@ Add the following script entry to `package.json`:
 }
 ```
 
-Compile the client side scripts:
+Compile the client side scripts with webpack:
 ```bash
 npm run build:client
 ```
@@ -195,6 +211,17 @@ npm run build:client
 Validate the following script files were created in `public/js`:
 - client.js
 - vendor.js
+
+Add the relative  to `src/config.js`:
+```js
+export default {
+    ...
+    scripts: [
+        '/js/client.js',
+        '/js/vendor.js'
+    ]
+};
+```
 
 Create `webpack.server.config.js`:
 ```js
@@ -228,17 +255,6 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx', '.json']
     }
-};
-```
-
-Add the script uris to `src/config.js`:
-```js
-export default {
-    ...
-    scripts: [
-        '/js/client.js',
-        '/js/vendor.js'
-    ]
 };
 ```
 
@@ -415,6 +431,8 @@ npm run dev:client
 
 
 ## Resources
+
+https://docs.npmjs.com/creating-a-package-json-file
 
 https://alligator.io/react/server-side-rendering/
 

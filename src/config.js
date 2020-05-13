@@ -1,3 +1,5 @@
+
+// Shared configuration
 export default {
     app: {
         title: 'React Demo',
