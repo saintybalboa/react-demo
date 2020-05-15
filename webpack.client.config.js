@@ -17,7 +17,7 @@ module.exports = {
             {
                 test: /\.(js|jsx)$/,
                 use: {
-                    loader: 'babel-loader', // Asks bundler to use babel loader to transpile es2015 code
+                    loader: 'babel-loader', // Ask bundler to use babel loader to transpile es2015 code
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react']
                     }
@@ -34,9 +34,9 @@ module.exports = {
             }
         ]
     },
-    target: 'web', // compile for usage in the browser, catering for use of window and document objects
+    target: 'web', // Compile for usage in the browser, catering for use of window and document objects
     resolve: {
-        // If multiple files share the same name but have different extensions, webpack will resolve the one with the extension listed first in the array and skip the rest.
-        extensions: ['.js', '.jsx', '.json']
+        // Resolve extensions of files with the same name in the following order:
+        extensions: ['.js', '.jsx', '.json', '.scss']
     }
 };

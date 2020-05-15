@@ -14,7 +14,7 @@ module.exports = {
         publicPath: '/',
         filename: '[name].bundle.js'
     },
-    devtool: 'inline-source-map', // returns error details (e.g. line no.) from the source file not the file bundled by webpack
+    devtool: 'inline-source-map', // Returns error details (e.g. line no.) from the source file not the file bundled by webpack
     devServer: {
         host: 'localhost',
         compress: true,
@@ -39,7 +39,7 @@ module.exports = {
         watchContentBase: true
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(), // Refreshes the html changes without reloading the page in browser
+        new webpack.HotModuleReplacementPlugin(), // Refresh html changes without reloading the page in browser
         new HtmlWebpackPlugin({
             templateContent: template({}, null, [], config.styles)
         })
@@ -67,7 +67,7 @@ module.exports = {
         ]
     },
     resolve: {
-        // If multiple files share the same name but have different extensions, webpack will resolve the one with the extension listed first in the array and skip the rest.
-        extensions: ['.js', '.jsx', '.json', ',scss']
+        // Resolve extensions of files with the same name in the following order:
+        extensions: ['.js', '.jsx', '.json', '.scss']
     }
 };

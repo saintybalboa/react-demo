@@ -1,8 +1,6 @@
 # Setup
 
-This part of the tutorial sets up the react demo project.
-
-This sets up the following:
+This part of the tutorial sets up the react demo project with the following:
 - React server-side rendering
 - React client-side rendering
 - Webpack
@@ -13,11 +11,30 @@ The react demo project requires a `package.json` to:
 - List project dependencies
 - Manage automated scripts
 
-Follow the instructions for creating a package.json: https://docs.npmjs.com/creating-a-package-json-file
-
-Install Express and React dependencies:
+Initialise the project:
 ```bash
-npm install express react
+npm init
+
+package name: (react-demo-tutorial) react-demo-tutorial
+version: (1.0.0)
+description: React demo tutorial
+entry point: (index.js) build/server.js
+test command: echo \"Error: no test specified\" && exit 1
+git repository:
+keywords: react,demo,tutorial
+author:
+license: (ISC)
+
+...
+
+Is this OK? (yes) yes
+```
+
+Validate `package.json` exists.
+
+Install dependencies:
+```bash
+npm install express react react-dom react-router-dom
 ```
 
 Create `src/config.js`:
@@ -27,11 +44,11 @@ export default {
     app: {
         title: 'React Demo',
     },
-    scripts: [] // Script definitions
+    scripts: [] // Script relative url paths
 };
 ```
 
-Create `src/templates/HTMLDocument.jsx`:
+Create `src/templates/HTMLDocument/HTMLDocument.jsx`:
 ```js
 import React from 'react';
 
@@ -52,11 +69,16 @@ function HTMLDocument({ markup, scripts }) {
 export default HTMLDocument;
 ```
 
+Create `src/templates/HTMLDocument/index.js`:
+```js
+export { default } from './HTMLDocument';
+```
+
 Create `src/template.js`:
 ```js
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import HTMLDocument from './components/HTMLDocument';
+import HTMLDocument from './templates/HTMLDocument';
 
 export default function(markup, scripts) {
     // Generate the static html document
@@ -72,6 +94,24 @@ export default function(markup, scripts) {
 }
 ```
 
+Create `src/components/App/App.jsx`:
+```js
+import React from 'react';
+
+function App() {
+    return (
+       <h1>React Demo</h1>
+    );
+}
+
+export default App;
+```
+
+Create `src/components/App/index.js`:
+```js
+export { default } from './App';
+```
+
 Create `src/server.js`:
 ```js
 import express from 'express';
@@ -84,10 +124,10 @@ import config from './config';
 
 const app = express();
 
-// make public assets accessible over the network
+// Make public assets accessible over the network
 app.use(express.static(path.join(__dirname, '../public')));
 
-// handle all routes
+// Handle all routes
 app.all('/*', async (req, res) => {
     // Generate the interactive html markup for react on the client
     const markup = renderToString(<App />);
@@ -114,11 +154,11 @@ import App from './components/App';
 hydrate(<App />, document.getElementById('root'));
 ```
 
-### Configure Babel
+### Setup Babel
 
 Install dependencies:
 ```bash
-npm install @babel/register @babel/preset-env @babel/preset-react --save-dev
+npm install @babel/register @babel/cli @babel/core @babel/node @babel/polyfill @babel/preset-env @babel/preset-react babel-loader --save-dev
 ```
 
 Create `.babelrc` with the following:
@@ -138,7 +178,8 @@ Create `.babelrc` with the following:
         ]
     ],
     "plugins": [
-        ["@babel/plugin-proposal-object-rest-spread"]
+        ["@babel/plugin-proposal-object-rest-spread"],
+        ["@babel/plugin-transform-runtime"]
     ]
 }
 ```
@@ -149,8 +190,9 @@ Create `.babelrc` with the following:
 
 - **@babel/plugin-proposal-object-rest-spread:** Cater for [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
 
+- **@babel/plugin-transform-runtime:** Enables the re-use of Babel's injected helper code to save on codesize.
 
-### Configure Webpack
+### Setup Webpack
 
 Install the following dependencies:
 ```bash
@@ -163,20 +205,22 @@ Create `webpack.client.config.js`:
 const path = require('path');
 
 module.exports = {
+    mode: 'production',
     entry: {
-        // Server side javascript file (entry point for starting the express server)
-        server: ['./src/server.js']
+        // Client side javascript files bundled with React
+        vendor: ['@babel/polyfill', 'react'],
+        client: ['./src/client.js']
     },
     output: {
-        path: path.resolve(__dirname, './', 'build'), // Destination for the server side bundled output is under ./build
-        filename: '[name].js' // Saves the following bundled file to the destination folder
+        path: path.resolve(__dirname, './', 'public/js'), // Destination folder for the client side bundled output is /public/js/
+        filename: '[name].js' // Saves the following bundled files to the destination folder: client.js, vendor.js
     },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
                 use: {
-                    loader: 'babel-loader', // asks bundler to use babel loader to transpile es2015 code
+                    loader: 'babel-loader', // Ask bundler to use babel loader to transpile es2015 code
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react']
                     }
@@ -185,7 +229,7 @@ module.exports = {
             }
         ]
     },
-    target: "node", // compile for usage in a Node.js like environment.
+    target: "web", // Compile for usage in the browser, catering for use of window and document objects
     resolve: {
         extensions: ['.js', '.jsx', '.json']
     }
@@ -212,7 +256,7 @@ Validate the following script files were created in `public/js`:
 - client.js
 - vendor.js
 
-Add the relative  to `src/config.js`:
+Add the relative script url paths to `src/config.js`:
 ```js
 export default {
     ...
@@ -228,21 +272,21 @@ Create `webpack.server.config.js`:
 const path = require('path');
 
 module.exports = {
+    mode: 'production',
     entry: {
-        // Client side javascript files bundled with React
-        vendor: ['@babel/polyfill', 'react'],
-        client: ['./src/client.js']
+        // Server side javascript file (entry point for starting the express server)
+        server: ['./src/server.js']
     },
     output: {
-        path: path.resolve(__dirname, './', 'public/js'), // Destination folder for the client side bundled output is /public/js/
-        filename: '[name].js' // Saves the following bundled files to the destination folder: client.js, vendor.js
+        path: path.resolve(__dirname, './', 'build'), // Destination for the server side bundled output is under ./build
+        filename: '[name].js' // Saves the following bundled file to the destination folder
     },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
                 use: {
-                    loader: 'babel-loader', // Asks bundler to use babel loader to transpile es2015 code
+                    loader: 'babel-loader', // Ask bundler to use babel loader to transpile es2015 code
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react']
                     }
@@ -251,7 +295,7 @@ module.exports = {
             }
         ]
     },
-    target: "web", // compile for usage in the browser, catering for use of window and document objects
+    target: "node", // Compile for usage in a Node.Js environment.
     resolve: {
         extensions: ['.js', '.jsx', '.json']
     }
@@ -296,12 +340,12 @@ npm run start
 ## Local development
 
 ### Backend development
-Use nodemon to restart the application server each time a change is made to the code.
+Use nodemon to restart the application server each time a change is made to `src/server.js`.
 
 Install `nodemon`:
 ```bash
 npm install nodemon -g
-npm install nodemon -save-dev
+npm install nodemon --save-dev
 ```
 
 Add as a script entry to `package.json`:
@@ -309,6 +353,7 @@ Add as a script entry to `package.json`:
 {
     ...
     "scripts": {
+        ...
         "dev:server": "nodemon --exec babel-node src/server.js"
     }
 }
@@ -353,7 +398,7 @@ module.exports = {
         publicPath: '/',
         filename: '[name].bundle.js'
     },
-    devtool: 'inline-source-map', // returns error details (e.g. line no.) from the source file not the file bundled by webpack
+    devtool: 'inline-source-map', // Return error details (e.g. line no.) from the source file not the file bundled by webpack
     devServer: {
         host: 'localhost',
         compress: true,
@@ -372,7 +417,7 @@ module.exports = {
         watchContentBase: true
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(), // Refreshes the html changes without reloading the page in browser
+        new webpack.HotModuleReplacementPlugin(), // Refresh html changes without reloading the page in browser
         new HtmlWebpackPlugin({
             templateContent: template('', [])
         })
@@ -400,18 +445,14 @@ module.exports = {
 
 Enable hot reloading in `src/client.js`:
 ```js
-...
+import React from 'react';
+import { hydrate } from 'react-dom';
+import App from './components/App';
+
 // Hot reload is only enabled when running the web-pack-dev server for local frontend development
 const renderMethod = module.hot ? render : hydrate;
 
-renderMethod(
-    <BrowserRouter>
-        <HelmetProvider>
-            <App />
-        </HelmetProvider>
-    </BrowserRouter>,
-    document.getElementById('root')
-);
+renderMethod(<App />, document.getElementById('root'));
 
 if (module.hot) {
     // Accept updates for the given dependencies and fire a callback to react to those updates.
@@ -430,10 +471,12 @@ Add the following script entry to `package.json`:
 }
 ```
 
-Start the webpack dev server:
+Start the webpack dev server to open the application in the browser:
 ```bash
 npm run dev:client
 ```
+
+Change the text to `React Deo Tutorial` in `src/components/App/App.jsx` to see changes automatically applied.
 
 
 #### [Tutorial part 2: Styling &#8594;](./2-styling.md)
