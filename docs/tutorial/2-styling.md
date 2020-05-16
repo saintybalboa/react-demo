@@ -287,7 +287,6 @@ npm run dev:client
 ```
 
 Change the styles in `src/assets/scss/variables.scss` to see changes automatically applied.
-```
 
 
 ## Resources
