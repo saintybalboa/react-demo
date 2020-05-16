@@ -123,9 +123,11 @@ npm run start
 ```
 
 Validate the styles have been applied in the browser:
+
 ![Image of React Demo styled page](screenshots/styling-js-enabled.png)
 
 Now disable javascript in your browser and refresh the page. Notice the styles have not been applied:
+
 ![Image of React Demo styled page](screenshots/styling-js-disabled.png)
 
 CSS is injected with javascript, therefore if javascript is disabled the css is not injected. Webpack server-side configuration (`webpack.server.config.js`) extracts all styles into `public/css/index.css`. The stylesheet can be injected into the head of the HTML document to ensure styles are applied when javascript is disabled.
@@ -208,6 +210,7 @@ npm run start
 ```
 
 Validate the styles have been applied in the browser when javascript is disabled:
+
 ![Image of React Demo styled page](screenshots/styling-js-enabled.png)
 
 Validate the stylesheet is not injected when javascript is enabled. The network requests tab should not show an entry for index.css
