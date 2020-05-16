@@ -2,7 +2,7 @@
   "name": "react-demo",
   "version": "1.0.0",
   "description": "React demo",
-  "main": "src/server.js",
+  "main": "build/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:client": "webpack --config webpack.client.config.js",

@@ -125,7 +125,7 @@ import config from './config';
 const app = express();
 
 // Make public assets accessible over the network
-app.use(express.static(path.join(__dirname, '../public')));
+app.use('/', express.static(path.resolve('public')));
 
 // Handle all routes
 app.all('/*', async (req, res) => {
@@ -338,6 +338,7 @@ npm run start
 
 
 ## Local development
+Each code change requires a rebuild and a page refresh, which slows down local development. There are tools available to speed up both backend and frontend development.
 
 ### Backend development
 Use nodemon to restart the application server each time a change is made to `src/server.js`.
@@ -359,13 +360,13 @@ Add as a script entry to `package.json`:
 }
 ```
 
-Startup the application server for local development:
+Start the application server for local development:
 ```bash
 npm run dev:server
 ```
 
 ### Frontend development
-Each code change requires a rebuild and a page refresh, which slows down frontend development. Speed up frontend development by utilising the following:
+Speed up frontend development by utilising the following:
 
 - [webpack-dev-server](https://webpack.js.org/configuration/dev-server/): A mini express server that listens for file changes to trigger an automated rebuild and page reload.
 
@@ -402,7 +403,7 @@ module.exports = {
     devServer: {
         host: 'localhost',
         compress: true,
-        port: 4040,
+        port: 4000,
         historyApiFallback: true, // Use the HTML5 History API to forward all routes to index.html page
         disableHostCheck: true, // Allow any domain hosted on this machine to be used
         hot: true, // Enable hot reloads
@@ -446,7 +447,7 @@ module.exports = {
 Enable hot reloading in `src/client.js`:
 ```js
 import React from 'react';
-import { hydrate } from 'react-dom';
+import { hydrate, render } from 'react-dom';
 import App from './components/App';
 
 // Hot reload is only enabled when running the web-pack-dev server for local frontend development
@@ -471,7 +472,7 @@ Add the following script entry to `package.json`:
 }
 ```
 
-Start the webpack dev server to open the application in the browser:
+Start webpack dev server:
 ```bash
 npm run dev:client
 ```
@@ -487,8 +488,6 @@ Change the text to `React Deo Tutorial` in `src/components/App/App.jsx` to see c
 https://docs.npmjs.com/creating-a-package-json-file
 
 https://alligator.io/react/server-side-rendering/
-
-https://www.npmjs.com/package/react-helmet-async
 
 https://www.freecodecamp.org/news/server-side-rendering-your-react-app-in-three-simple-steps-7a82b95db82e/
 

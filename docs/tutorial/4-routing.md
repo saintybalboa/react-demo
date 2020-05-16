@@ -7,3 +7,8 @@ Install React Helmet Async, a library that allows us to inject things to head. I
 ```bash
 npm install --save react-helmet-async
 ```
+
+
+## Resources
+
+https://www.npmjs.com/package/react-helmet-async

@@ -8,11 +8,6 @@ This part of the tutorial adds styling to the react demo.
 
 Separate shared styling such as typhography, colours and layouts into reusable files.
 
-Create the following directory:
-```bash
-mkdir -p src/assets/scss
-```
-
 Create `src/assets/scss/variables.scss`:
 ```scss
 // Manage shared variables
@@ -26,7 +21,6 @@ Component specific `.scss` files are created in the same folder as the component
 
 Create `src/components/App/App.scss`:
 ```scss
-// Import shared variables
 @import '../../assets/scss/variables';
 
 body {
@@ -40,9 +34,10 @@ body {
 Update `src/components/App/App.jsx`:
 ```js
 import './App.scss';
+...
 ```
 
-Importing `.scss` files within the component `.jsx` will cause a javascript runtime error because it does not recognise the syntax.
+Importing `.scss` files within the component `.jsx` file will cause a javascript runtime error because it does not recognise the syntax.
 
 Install the following dev dependencies:
 ```bash
@@ -70,11 +65,23 @@ module.exports = {
 };
 ```
 
+Compile the client side scripts with webpack:
+```bash
+npm run build:client
+```
+
+Install the following dependencies:
+```bash
+npm install mini-css-extract-plugin --save-dev
+```
+
 Update `webpack.server.config.js`:
 ```js
 ...
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 module.exports = {
-        ...
+    ...
     module: {
         rules: [
             ...
@@ -110,8 +117,103 @@ Validate `public/css/index.css` exists with the following styles:
 body{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;color:#495057;background-color:#f5f7fb;font-size:12px}
 ```
 
-### Local development
-For debugging purposes, in local development we're running the server directly from the source code i.e. the `src/server.js`. This is executed using `babel-node`, which will through an error because it doesn't know how to handle sass imports in js. Add the following plugin to the babel configuration to [.babelrc](../../.babelrc) to resolve sass imports at runtime:
+Start the application:
+```bash
+npm run start
+```
+
+Validate the styles have been applied in the browser:
+![Image of React Demo styled page](screenshots/styling-js-enabled.png)
+
+Now disable javascript in your browser and refresh the page. Notice the styles have not been applied:
+![Image of React Demo styled page](screenshots/styling-js-disabled.png)
+
+CSS is injected with javascript, therefore if javascript is disabled the css is not injected. Webpack server-side configuration (`webpack.server.config.js`) extracts all styles into `public/css/index.css`. The stylesheet can be injected into the head of the HTML document to ensure styles are applied when javascript is disabled.
+
+Update `src/templates/HTMLDocument/HTMLDocument.jsx`:
+```js
+import React from 'react';
+
+// Inject stylesheet when javascript is disabled
+const generateStyles = styles => styles.map((href) => (`<noscript><link rel="stylesheet" href=${href} /></noscript>`)).join('');
+
+function HTMLDocument({ markup, scripts, styles }) {
+    return (
+        <html lang="en">
+            <head dangerouslySetInnerHTML={{ __html: generateStyles(styles) }} />
+            <body>
+                <div id="root" dangerouslySetInnerHTML={{ __html: markup }} />
+                {scripts && scripts.map(src => (
+                    <script key={src} src={src} />
+                ))}
+            </body>
+        </html>
+    );
+}
+
+export default HTMLDocument;
+```
+
+Update `src/template.js`:
+```js
+...
+export default function(markup, scripts, styles) {
+    // Generate the static html document
+    const htmlDocument = renderToStaticMarkup(
+        <HTMLDocument
+            markup={markup}
+            scripts={scripts}
+            styles={styles}
+        />
+    );
+
+    // <!doctype html> syntax is invalid inside a react component
+    return `<!DOCTYPE html>${htmlDocument}`;
+}
+...
+```
+
+Update `src/server.js`:
+```js
+...
+// Handle all routes
+app.all('/*', async (req, res) => {
+    // Generate the interactive html markup for react on the client
+    const markup = renderToString(<App />);
+
+    // Render the static html page
+    res.status(200).send(template(markup, config.scripts, config.styles));
+});
+...
+```
+
+Update `src/config.js`:
+```js
+export default {
+    ...
+    styles: [
+        '/css/index.css'
+    ]
+};
+```
+
+Compile the application server:
+```bash
+npm run build:server
+```
+
+Start the application server:
+```bash
+npm run start
+```
+
+Validate the styles have been applied in the browser when javascript is disabled:
+![Image of React Demo styled page](screenshots/styling-js-enabled.png)
+
+Validate the stylesheet is not injected when javascript is enabled. The network requests tab should not show an entry for index.css
+
+### Backend development
+Update babel configuration to [.babelrc](../../.babelrc) to resolve sass imports at runtime:
 
 Install postcss dependency:
 ```bash
@@ -140,9 +242,50 @@ Update `.babelrc`:
 }
 ```
 
+Start the application server for local development:
 ```bash
 npm run dev:server
 ```
+
+### Frontend development
+
+Configure webpack dev server to handle `.scss` imports.
+
+Update `webpack.dev.config.js`:
+```js
+...
+module.exports = {
+    module: {
+        rules: [
+            ...
+            {
+                test: /\.scss$/,
+                use: [
+                    { loader: 'style-loader' }, // Creates the javascript to inject CSS into the DOM
+                    { loader: 'css-loader' },   // Interprets @import/url() as import/require() within the js and resolves them
+                    { loader: 'sass-loader' }   // Loads a Sass/SCSS file and compiles it to CSS.
+                ]
+            }
+        ]
+    },
+    ...
+    plugins: [
+        ...
+        new HtmlWebpackPlugin({
+            templateContent: template('', null, [], config.styles)
+        })
+    ],
+};
+```
+
+Start weback dev server:
+```bash
+npm run dev:client
+```
+
+Change the styles in `src/assets/scss/variables.scss` to see changes automatically applied.
+```
+
 
 ## Resources
 https://sass-lang.com/

@@ -42,7 +42,7 @@ module.exports = {
     },
     resolve: {
         // Resolve extensions of files with the same name in the following order:
-        extensions: ['.js', '.jsx', '.json', '.scss']
+        extensions: ['.js', '.jsx', '.json']
     },
     plugins: [
         new MiniCssExtractPlugin({

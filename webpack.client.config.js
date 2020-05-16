@@ -8,7 +8,7 @@ module.exports = {
         client: ['./src/client.js']
     },
     output: {
-        path: path.resolve(__dirname, './', 'public/js'), // Destination folder for the client side bundled output is /public/js/
+        path: path.resolve(__dirname, './', 'public/js'), // Destination folder for the bundled client-side scripts
         filename: '[name].js' // Saves the following bundled files to the destination folder: client.js, vendor.js
     },
     devtool: 'inline-source-map',
@@ -37,6 +37,6 @@ module.exports = {
     target: 'web', // Compile for usage in the browser, catering for use of window and document objects
     resolve: {
         // Resolve extensions of files with the same name in the following order:
-        extensions: ['.js', '.jsx', '.json', '.scss']
+        extensions: ['.js', '.jsx', '.json']
     }
 };

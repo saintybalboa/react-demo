@@ -1,9 +1,6 @@
 import React from 'react';
 
-const generateStyles = styles => styles.map(({ href, noscript }) => (
-    (noscript && `<noscript><link rel="stylesheet" href=${href} /></noscript>`)
-    || `<link rel="stylesheet" href=${href} />`
-)).join('');
+const generateStyles = styles => styles.map((href) => (`<noscript><link rel="stylesheet" href=${href} /></noscript>`)).join('');
 
 const generateHead = ({ helmet, styles }) => [
     helmet && helmet.title.toString(),
