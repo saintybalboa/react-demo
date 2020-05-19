@@ -1,8 +1,8 @@
 # Styling
 
-This part of the tutorial adds styling to the react demo.
+This part of the tutorial adds styling to the React Demo.
 
-[Sass](https://sass-lang.com/) will be used for styling throughout the web application. It enables the use of variables, nested rules, mixins, inline imports making it easier to manage, make changes and write less css.
+[Sass](https://sass-lang.com/) will be used for styling. It enables the use of variables, nested rules, mixins, inline imports making it easier to manage, make changes and write less css.
 
 ## Setup
 
@@ -117,7 +117,7 @@ Validate `public/css/index.css` exists with the following styles:
 body{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;color:#495057;background-color:#f5f7fb;font-size:12px}
 ```
 
-Start the application:
+Start the application server:
 ```bash
 npm run start
 ```
@@ -287,6 +287,9 @@ npm run dev:client
 ```
 
 Change the styles in `src/assets/scss/variables.scss` to see changes automatically applied.
+
+
+#### [Tutorial part 3: Testing &#8594;](./3-testing.md)
 
 
 ## Resources

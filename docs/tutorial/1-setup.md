@@ -1,6 +1,6 @@
 # Setup
 
-This part of the tutorial sets up the react demo project with the following:
+This part of the tutorial sets up the React Demo project with the following:
 - React server-side rendering
 - React client-side rendering
 - Webpack
