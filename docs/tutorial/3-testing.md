@@ -19,7 +19,7 @@ module.exports = {
     ],
     moduleNameMapper: {
         // Stub out styles (sass imports) to prevent syntax errors.
-        '^.+\\.(css|less|scss)$': 'babel-jest'
+        '^.+\\.(scss)$': 'babel-jest'
     }
 };
 ```
