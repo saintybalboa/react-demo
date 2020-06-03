@@ -1,6 +1,6 @@
 # Testing
 
-This section sets up a test environment for the React Demo.
+This part of the tutorial sets up a test environment for the React Demo.
 
 [Jest](https://facebook.github.io/jest/docs/en/getting-started.html) and [Enzyme](https://enzymejs.github.io/enzyme/) will be used to write tests for react components.
 
@@ -65,56 +65,8 @@ Run tests:
 npm run test:unit
 ```
 
-## Integration tests
-[Cypress](https://www.cypress.io/) will be used to write integration tests for the React Demo.
 
-Install dependencies:
-```bash
-npm install -g cypress
-npm install cypress --save-dev
-```
-
-Create `cypress.json` with the following:
-```json
-{
-  "baseUrl": "http://localhost:4040"
-}
-```
-
-Create `cypress/integration/home.spec.js`:
-```js
-// / <reference types='Cypress' />
-describe('Home', () => {
-    before(() => {
-        cy.visit('/');
-    });
-
-    it('should render the correct page title', () => {
-        cy.get('h1').contains('React Demo');
-    });
-});
-```
-
-Start the application server:
-```bash
-npm run start
-```
-
-Add the following script entry to `package.json`:
-```bash
-{
-    ...
-    "scripts": {
-        ...
-        "test:integration": "cypress run",
-    }
-}
-```
-
-Run integration tests:
-```bash
-npm run test:integration
-```
+#### [Tutorial part 4: Components &#8594;](./4-components.md)
 
 
 ## Resources
@@ -126,9 +78,3 @@ https://enzymejs.github.io/enzyme/docs/guides/jest.html#configure-with-jest
 https://stackoverflow.com/questions/46627353/where-should-the-enzyme-setup-file-be-written
 
 https://stackoverflow.com/questions/55344422/what-is-adapter-in-enzyme
-
-https://www.valentinog.com/blog/cypress/
-
-https://docs.cypress.io/api/commands/contains.html#Syntax
-
-https://github.com/GoogleChrome/lighthouse/blob/master/docs/configuration.md

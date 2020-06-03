@@ -1,11 +1,6 @@
 # Setup
 
-This part of the tutorial sets up the React Demo project with the following:
-- React server-side rendering
-- React client-side rendering
-- Webpack
-- Nodemon
-- React hot reloading
+This part of the tutorial sets up the React Demo project for production and local development.
 
 The react demo project requires a `package.json` to:
 - List project dependencies
@@ -32,6 +27,9 @@ Is this OK? (yes) yes
 
 Validate `package.json` exists.
 
+
+Setup React for server-side and client-side rendering.
+
 Install dependencies:
 ```bash
 npm install express react react-dom react-router-dom
@@ -41,9 +39,6 @@ Create `src/config.js`:
 ```js
 // Shared configuration
 export default {
-    app: {
-        title: 'React Demo',
-    },
     scripts: [] // Script relative url paths
 };
 ```
@@ -123,18 +118,21 @@ import template from './template';
 import config from './config';
 
 const app = express();
-
-// Make public assets accessible over the network
-app.use('/', express.static(path.resolve('public')));
+const router = express.Router();
 
 // Handle all routes
-app.all('/*', async (req, res) => {
+router.get('/*', async (req, res) => {
     // Generate the interactive html markup for react on the client
     const markup = renderToString(<App />);
 
     // Render the static html page
     res.status(200).send(template(markup, config.scripts));
 });
+
+// Make public assets accessible over the network
+app.use('/', express.static(path.resolve('public')));
+
+app.use(router);
 
 const port = 4040;
 const host = 'localhost';
@@ -336,12 +334,13 @@ Start the application server:
 npm run start
 ```
 
+Open the React Demo in a browser: http://localhost:4040/
 
 ## Local development
 Each code change requires a rebuild and a page refresh, which slows down local development. There are tools available to speed up both backend and frontend development.
 
 ### Backend development
-Use nodemon to restart the application server each time a change is made to `src/server.js`.
+Use nodemon to restart the application server each time a change is made to the server-side code.
 
 Install `nodemon`:
 ```bash
@@ -364,6 +363,14 @@ Start the application server for local development:
 ```bash
 npm run dev:server
 ```
+
+Make a change to `src/server.js` and view the log output in the terminal:
+```js
+...
+server.on('listening', () => console.log(`Server restarted at http://${host}:${port}`));
+...
+```
+
 
 ### Frontend development
 Speed up frontend development by utilising the following:
@@ -477,7 +484,9 @@ Start webpack dev server:
 npm run dev:client
 ```
 
-Change the text to `React Deo Tutorial` in `src/components/App/App.jsx` to see changes automatically applied.
+The React Demo should automatically be opened in the browser: http://localhost:4000/
+
+Change the text to `React Demo Tutorial` in `src/components/App/App.jsx` to see changes automatically applied.
 
 
 #### [Tutorial part 2: Styling &#8594;](./2-styling.md)

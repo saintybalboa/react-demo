@@ -65,7 +65,7 @@ module.exports = {
 };
 ```
 
-Compile the client side scripts with webpack:
+Compile the client side scripts:
 ```bash
 npm run build:client
 ```
@@ -179,7 +179,7 @@ Update `src/server.js`:
 ```js
 ...
 // Handle all routes
-app.all('/*', async (req, res) => {
+router.get('/*', async (req, res) => {
     // Generate the interactive html markup for react on the client
     const markup = renderToString(<App />);
 
@@ -275,7 +275,7 @@ module.exports = {
     plugins: [
         ...
         new HtmlWebpackPlugin({
-            templateContent: template('', null, [], config.styles)
+            templateContent: template('', [], config.styles)
         })
     ],
 };
