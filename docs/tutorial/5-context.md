@@ -232,7 +232,7 @@ Validate the correct content is rendered.
 As data requirements grow, it is not ideal to manage data in both `src/server.js` and `webpack.dev.config`. The next part of the tutorial will cover how to overcome this problem.
 
 
-#### [Tutorial part 6: Routing &#8594;](./6-routing.md)
+#### [&#8592; Previous: Components ](./4-components.md) | [Next: Routing &#8594;](./6-routing.md)
 
 
 ## Resources

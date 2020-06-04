@@ -489,7 +489,7 @@ The React Demo should automatically be opened in the browser: http://localhost:4
 Change the text to `React Demo Tutorial` in `src/components/App/App.jsx` to see changes automatically applied.
 
 
-#### [Tutorial part 2: Styling &#8594;](./2-styling.md)
+#### [Next: Styling &#8594;](./2-styling.md)
 
 
 ## Resources

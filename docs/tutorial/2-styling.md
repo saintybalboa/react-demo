@@ -289,7 +289,7 @@ npm run dev:client
 Change the styles in `src/assets/scss/variables.scss` to see changes automatically applied.
 
 
-#### [Tutorial part 3: Testing &#8594;](./3-testing.md)
+#### [&#8592; Previous: Setup ](./1-setup.md) | [Next: Testing &#8594;](./3-testing.md)
 
 
 ## Resources

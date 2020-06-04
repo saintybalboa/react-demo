@@ -66,7 +66,7 @@ npm run test:unit
 ```
 
 
-#### [Tutorial part 4: Components &#8594;](./4-components.md)
+#### [&#8592; Previous: Styling ](./2-styling.md) | [Next: Components &#8594;](./4-components.md)
 
 
 ## Resources

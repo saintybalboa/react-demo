@@ -128,7 +128,7 @@ const routes =  [
     path: '/',
     exact: true,
     component: Homepage,
-    // Assign the service fetcher to ensure the initial data is fetched for the service page
+    // Assign the service fetcher to ensure the initial data is fetched for the homepage
     fetchInitialData: fetchHomepage
   },
   {
@@ -444,6 +444,9 @@ npm run dev:client
 Validate page navigation works and the correct content is rendered.
 
 
+#### [&#8592; Previous: Context ](./5-context.md)
+
+
 ## Resources
 
 https://medium.com/the-andela-way/understanding-the-fundamentals-of-routing-in-react-b29f806b157e
@@ -463,8 +466,6 @@ https://reacttraining.com/react-router/web/api/Hooks
 https://www.npmjs.com/package/axios
 
 https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/Switch.md
-
-https://www.npmjs.com/package/react-helmet-async
 
 https://kentcdodds.com/blog/understanding-reacts-key-prop
 

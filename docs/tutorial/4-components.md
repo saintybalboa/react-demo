@@ -113,7 +113,7 @@ npm run start
 ```
 
 
-#### [Tutorial part 5: Context &#8594;](./5-context.md)
+#### [&#8592; Previous: Testing ](./3-testing.md) | [Next: Context &#8594;](./5-context.md)
 
 
 ## Resources
