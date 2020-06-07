@@ -84,7 +84,7 @@ Add a fetcher to get data for a service by the id.
 
 Install the following dependency:
 ```bash
-npm install axios
+npm install axios --save
 ```
 
 Create `src/fetchers/homepage.js`:

@@ -4,11 +4,28 @@ This part of the tutorial creates React Components to build parts of the React D
 
 > Components let you split the UI into independent, reusable pieces, and think about each piece in isolation.
 
+Install dependencies:
+```bash
+npm install --save prop-types
+```
+
 Build a React Component to render a page header.
+
+Create `src/components/PageHeader/PageHeader.scss`:
+```scss
+@import '../../assets/scss/variables';
+
+.page-header {
+    color: $color;
+    border-bottom: 1px solid $color;
+}
+```
 
 Create `src/components/PageHeader/PageHeader.jsx`:
 ```js
 import React from 'react';
+import PropTypes from 'prop-types';
+import './PageHeader.scss';
 
 // Deconstruct props argument "PageHeader(props)"
 function PageHeader({ heading }) {
@@ -18,6 +35,12 @@ function PageHeader({ heading }) {
         </div>
     )
 }
+
+// Use typechecking to validate props
+PageHeader.propTypes = {
+    // Component must be supplied with a string value for the heading prop
+    heading: PropTypes.string.isRequired
+};
 
 export default PageHeader;
 ```
@@ -29,9 +52,20 @@ export { default } from './PageHeader';
 
 Build a React Component to render page content.
 
+Create `src/components/PageContent/PageContent.scss`:
+```scss
+@import '../../assets/scss/variables';
+
+.page-content {
+    border-bottom: 1px solid $color;
+}
+```
+
 Create `src/components/PageContent/PageContent.jsx`:
 ```js
 import React from 'react';
+import PropTypes from 'prop-types';
+import './PageContent.scss';
 
 // Deconstruct children (components/elements wrapped within <PageContent> ... </PageContent>)
 function PageContent({ children }) {
@@ -41,6 +75,12 @@ function PageContent({ children }) {
         </div>
     )
 }
+
+// Use typechecking to validate props
+PageContent.propTypes = {
+    // Components must be supplied with children
+    children: PropTypes.node.isRequired
+};
 
 export default PageContent;
 ```
@@ -113,10 +153,13 @@ npm run start
 ```
 
 
-#### [&#8592; Previous: Testing ](./3-testing.md) | [Next: Context &#8594;](./5-context.md)
+#### [&#8592; Previous: Testing](./3-testing.md) | [Next: Context &#8594;](./5-context.md)
 
 
 ## Resources
 
 https://reactjs.org/docs/components-and-props.html
 
+https://www.npmjs.com/package/prop-types
+
+https://reactjs.org/docs/typechecking-with-proptypes.html

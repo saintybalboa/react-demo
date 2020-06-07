@@ -235,7 +235,7 @@ module.exports = {
 ```
 
 Add the following script entry to `package.json`:
-```bash
+```json
 {
     ...
     "scripts": {
@@ -301,7 +301,7 @@ module.exports = {
 ```
 
 Add the following script entry to `package.json`:
-```bash
+```json
 {
     ...
     "scripts": {
@@ -319,7 +319,7 @@ npm run build:server
 Validate `server.js` exists in the `build` directory.
 
 Add the following script entry to `package.json`:
-```bash
+```json
 {
     ...
     "scripts": {
@@ -349,7 +349,7 @@ npm install nodemon --save-dev
 ```
 
 Add as a script entry to `package.json`:
-```bash
+```json
 {
     ...
     "scripts": {
@@ -469,7 +469,7 @@ if (module.hot) {
 ```
 
 Add the following script entry to `package.json`:
-```bash
+```json
 {
     ...
     "scripts": {

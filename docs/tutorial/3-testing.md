@@ -50,7 +50,7 @@ describe('<App />', () => {
 ```
 
 Add the following script entry to `package.json`:
-```bash
+```json
 {
     ...
     "scripts": {
