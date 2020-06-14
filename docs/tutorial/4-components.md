@@ -252,6 +252,7 @@ describe('<Notification />', () => {
         )
         expect(component.text()).toBe('Notification message');
     });
+
     it('should render a notification of type success', () => {
         const component = mount(
             <Notification
@@ -261,6 +262,7 @@ describe('<Notification />', () => {
         )
         expect(component.find('.notification--success')).toHaveLength(1);
     });
+
     it('should render a notification of type error', () => {
         const component = mount(
             <Notification
@@ -270,6 +272,7 @@ describe('<Notification />', () => {
         )
         expect(component.find('.notification--error')).toHaveLength(1);
     });
+
     it('should render a notification of type info', () => {
         const component = mount(
             <Notification
@@ -279,6 +282,7 @@ describe('<Notification />', () => {
         )
         expect(component.find('.notification--info')).toHaveLength(1);
     });
+
     it('should render a notification of type warning', () => {
         const component = mount(
             <Notification
