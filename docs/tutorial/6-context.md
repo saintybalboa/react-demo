@@ -17,19 +17,35 @@ Create some dummy data in `src/static-data/homepage-data.json`:
 Create `src/contexts/data-context.jsx`:
 ```js
 import React, { createContext, useContext } from 'react';
+import PropTypes from 'prop-types';
+import { notification } from '../prop-types';
 
-export const DataContext = createContext({});
+const DataContext = createContext({});
 
 // Create a Context Provider React component to allow consuming components to subscribe to context changes.
 // The value property represents the data accessible to all consuming component that are descendants of the Provider.
 // The Provider will re-render whenever the Provider’s value prop changes.
-export const DataProvider = ({ data, children }) => (
+const DataProvider = ({ data, children }) => (
   <DataContext.Provider value={data}>{children}</DataContext.Provider>
 );
 
+DataProvider.propTypes = {
+  page: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired
+  }),
+  notification: notification
+};
+
 // The useContext hook accepts a context object and returns the value set in the Context Provider.
 // Create a wrapper function to get the value from the DataContext.Provider.
-export const useDataContext = () => useContext(DataContext);
+const useDataContext = () => useContext(DataContext);
+
+export {
+  DataContext,
+  DataProvider,
+  useDataContext
+};
 ```
 
 Initial data is fetched server-side because the browser makes the first request to the application server.
@@ -39,13 +55,22 @@ Update `src/server.js`:
 ...
 import { DataProvider } from './contexts/data-context';
 import homepageData from './static-data/homepage-data.json';
+
 ...
+
 // Handle all routes
-app.get('/*', async (req, res) => {
+router.get('/*', async (req, res) => {
+    const data = {
+        page: homepageData,
+        notification: {
+            type: 'info',
+            message: 'Example page notification.'
+        }
+    };
     // Generate the interactive html markup for react on the client.
     // Components that are descendants of the DataProvider will be able access the data.
     const markup = renderToString(
-        <DataProvider data={homepageData}>
+        <DataProvider data={data}>
             <App />
         </DataProvider>
     );
@@ -74,23 +99,83 @@ function App() {
 
 Update `src/pages/Homepage/Homepage.jsx`:
 ```js
-...
+import React from 'react';
+import Notification from '../../components/Notification';
+import PageHeader from '../../components/PageHeader';
+import PageContent from '../../components/PageContent';
 import { useDataContext } from '../../contexts/data-context';
 
 function Homepage() {
-    // Get title and content from the initial data stored in the data context
-    const {title, content} = useDataContext();
+    // Get initial data stored in the data context
+    const { page, notification } = useDataContext();
 
     return (
-        <div class="page">
-            <PageHeader heading={title} />
+        <div className="page">
+            {notification &&
+                <Notification
+                    type={notification.type}
+                    message={notification.message}
+                />
+            }
+            <PageHeader heading={page.title} />
             <PageContent>
-                <p>{content}</p>
+                <p>{page.content}</p>
             </PageContent>
         </div>
     );
 }
-...
+
+export default Homepage;
+```
+
+Update `src/pages/Homepage/Homepage.test.js`:
+```js
+import React from 'react';
+import { mount } from 'enzyme';
+import { DataProvider } from '../../contexts/data-context';
+import Homepage from '.';
+
+const data = {
+    page: {
+        title: 'Test heading',
+        content: 'Test content'
+    }
+};
+
+const component = mount(
+    <DataProvider data={data}>
+        <Homepage />
+    </DataProvider>
+);
+
+describe('<Homepage />', () => {
+    it('should render the homepage with a page header', () => {
+        expect(component.find('PageHeader')).toHaveLength(1);
+        expect(component.find('PageHeader').text()).toBe(data.page.title);
+    });
+
+    it('should render the homepage with page content', () => {
+        expect(component.find('PageContent')).toHaveLength(1);
+        expect(component.find('PageContent').text()).toBe(data.page.content);
+    });
+
+        it('should render the homepage without notification when notification prop is not populated', () => {
+        expect(component.find('Notification')).toHaveLength(0);
+    });
+
+    it('should render the homepage with notification when notification prop is populated', () => {
+        data.notification = {
+            type: 'success',
+            message: 'Test message'
+        };
+        const componentWithNotification = mount(
+            <DataProvider data={data}>
+                <Homepage />
+            </DataProvider>
+        );
+        expect(componentWithNotification.find('Notification')).toHaveLength(1);
+    });
+});
 ```
 
 > React expects that the rendered content is identical between the server and the client.
@@ -148,19 +233,10 @@ Update `src/server.js`:
 ...
 // Handle all routes
 router.get('/*', async (req, res) => {
-    // Set initial data to the homepage data
-    const initialData = homepageData;
-
-    // Generate the interactive html markup for react on the client.
-    // Components that are descendants of the DataProvider will be able access the data.
-    const markup = renderToString(
-        <DataProvider data={initialData}>
-            <App />
-        </DataProvider>
-    );
+    ...
 
     // Render the static html page
-    res.status(200).send(template(markup, config.scripts, config.styles, initialData));
+    res.status(200).send(template(markup, config.scripts, config.styles, data));
 });
 ...
 ```
@@ -182,6 +258,13 @@ renderMethod(
 );
 ...
 ```
+
+Run tests:
+```bash
+npm run test:unit
+```
+
+Validate all tests pass.
 
 Compile the application server:
 ```bash
@@ -229,10 +312,10 @@ npm run dev:client
 
 Validate the correct content is rendered.
 
-As data requirements grow, it is not ideal to manage data in both `src/server.js` and `webpack.dev.config`. The next part of the tutorial will cover how to overcome this problem.
+As data requirements grow, it is not ideal to manage data in both `src/server.js` and `webpack.dev.config`. The next part of the tutorial provides a solution to this problem.
 
 
-#### [&#8592; Previous: Components ](./4-components.md) | [Next: Routing &#8594;](./6-routing.md)
+#### [&#8592; Previous: Storybook ](./5-storybook.md) | [Next: Routing &#8594;](./7-routing.md)
 
 
 ## Resources
@@ -240,3 +323,5 @@ As data requirements grow, it is not ideal to manage data in both `src/server.js
 https://reactjs.org/docs/context.html
 
 https://www.freecodecamp.org/news/react-context-in-5-minutes/
+
+https://itnext.io/jest-tests-with-react-context-api-90f3d2e06c8f

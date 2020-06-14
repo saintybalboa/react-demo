@@ -216,7 +216,7 @@ Validate the styles have been applied in the browser when javascript is disabled
 Validate the stylesheet is not injected when javascript is enabled. The network requests tab should not show an entry for index.css
 
 ### Backend development
-Update babel configuration to [.babelrc](../../.babelrc) to resolve sass imports at runtime:
+Configure Babel to resolve sass imports at runtime:
 
 Install postcss dependency:
 ```bash

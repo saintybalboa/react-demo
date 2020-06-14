@@ -39,6 +39,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import App from '.';
 
+// Re-mount the component, if it is not currently mounted. Ensures the component renders it's content.
 const component = mount(<App />);
 
 describe('<App />', () => {
