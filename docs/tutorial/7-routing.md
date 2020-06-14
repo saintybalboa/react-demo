@@ -392,6 +392,42 @@ export default function Service() {
 }
 ```
 
+Create `src/prop-types/service.js`:
+```js
+import PropTypes from 'prop-types';
+
+const service = PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    items: PropTypes.arrayOf(PropTypes.string).isRequired
+});
+
+export default service;
+```
+
+Update `src/prop-types/index.js`:
+```js
+export { default as page } from './page';
+export { default as service} from './service';
+export { default as notification } from './notification';
+```
+
+Update `src/contexts/data-context.jsx`:
+```js
+import React, { createContext, useContext } from 'react';
+import { notification, page, service } from '../prop-types';
+
+...
+
+DataProvider.propTypes = {
+  page: page,
+  service: service,
+  notification: notification
+};
+
+...
+```
+
 Compile the application server:
 ```bash
 npm run build:server

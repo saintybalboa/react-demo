@@ -17,8 +17,7 @@ Create some dummy data in `src/static-data/homepage-data.json`:
 Create `src/contexts/data-context.jsx`:
 ```js
 import React, { createContext, useContext } from 'react';
-import PropTypes from 'prop-types';
-import { notification } from '../prop-types';
+import { notification, page } from '../prop-types';
 
 const DataContext = createContext({});
 
@@ -30,10 +29,7 @@ const DataProvider = ({ data, children }) => (
 );
 
 DataProvider.propTypes = {
-  page: PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired
-  }),
+  page: page,
   notification: notification
 };
 

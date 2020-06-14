@@ -8,17 +8,19 @@ React – A JavaScript library for building user interfacesreactjs.org).
 
 This tutorial takes you through the process of building a react universal web app. It assumes that you have some basic knowledge of React and JavaScript. The tutorial covers the following areas:
 
-- Setup
+- [Setup](docs/tutorial/1-setup.md)
 
-- Styling
+- [Styling](docs/tutorial/2-styling.md)
 
-- Testing
+- [Testing](docs/tutorial/3-testing.md)
 
-- Components
+- [Components](docs/tutorial/4-components.md)
 
-- Context
+- [Storybook](docs/tutorial/5-storybook.md)
 
-- Routing
+- [Context](docs/tutorial/6-context.md)
+
+- [Routing](docs/tutorial/7-routing.md)
 
 
 ### [Start the tutorial &#8594;](./docs/tutorial/1-setup.md)
