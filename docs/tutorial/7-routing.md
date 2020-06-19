@@ -359,11 +359,11 @@ export default function Service() {
         // Create an async function to use 'await' and invoke the function within useEffect()
         const getServiceData = async () => {
             // Fetch service data if it does not already exist for the service with the specified id
-            if (!initialData || (initialData.service && initialData.service.id !== id)) {
+            if (initialData && initialData.service && initialData.service.id === id)
+                setServiceData(initialData.service);
+            else {
                 const serviceData = await fetchService({ id });
                 setServiceData(serviceData.service);
-            } else {
-                setServiceData(initialData.service);
             }
         };
 
