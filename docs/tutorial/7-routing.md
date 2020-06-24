@@ -359,9 +359,9 @@ export default function Service() {
         // Create an async function to use 'await' and invoke the function within useEffect()
         const getServiceData = async () => {
             // Fetch service data if it does not already exist for the service with the specified id
-            if (initialData && initialData.service && initialData.service.id === id)
+            if (initialData && initialData.service && initialData.service.id === id) {
                 setServiceData(initialData.service);
-            else {
+            } else {
                 const serviceData = await fetchService({ id });
                 setServiceData(serviceData.service);
             }
@@ -503,7 +503,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { DataProvider } from '../contexts/data-context';
 
 // Use MemoryRouter to allow the router to be reset between tests.
-export const Wrapper = ({ children, location, data = { page: { title: 'title', content: 'content'} } }) => {
+export const Wrapper = ({ children, location, data = {} }) => {
     // Set MemoryRouter prop initialEntries to start at a specific location/route
     return (
         <MemoryRouter context={{}} initialEntries={[location]}>
@@ -525,7 +525,7 @@ import App from '.';
 describe('<App />', () => {
     it('should render the app name', () => {
         const component = mount(
-            <Wrapper location='/'>
+            <Wrapper location='/' data={{ page: { title: 'title', content: 'content'}}}>
                 <App />
             </Wrapper>
         );
@@ -535,7 +535,7 @@ describe('<App />', () => {
 
     it('should render the homepage', () => {
         const component = mount(
-            <Wrapper location='/'>
+            <Wrapper location='/' data={{ page: { title: 'title', content: 'content'}}}>
                 <App />
             </Wrapper>
         );
@@ -543,8 +543,15 @@ describe('<App />', () => {
     });
 
     it('should render the service page', () => {
+        // Mock route params
+        jest.mock("react-router-dom", () => ({
+            useParams: () => ({
+                id: 1
+            })
+        }));
+
         const component = mount(
-            <Wrapper location='/services/2'>
+            <Wrapper location='/services/1' data={{ service: { id: 1, name: 'service', items: ['content']}}}>
                 <App />
             </Wrapper>
         );
@@ -564,6 +571,8 @@ import { DataProvider } from '../../contexts/data-context';
 import { fetchHomepage } from '../../fetchers';
 import Homepage from '.';
 
+jest.mock('../../fetchers');
+
 const data = {
     page: {
         title: 'Test heading',
@@ -576,8 +585,6 @@ const component = mount(
         <Homepage />
     </DataProvider>
 );
-
-jest.mock('../../fetchers');
 
 describe('<Homepage />', () => {
     it('should render the homepage with a page header', () => {
@@ -643,6 +650,17 @@ import { DataProvider } from '../../contexts/data-context';
 import { fetchService } from '../../fetchers';
 import Service from '.';
 
+// Mock fetchers to prevent network requests
+jest.mock('../../fetchers');
+
+// Mock route params
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useParams: () => ({
+        id: 1
+    })
+}));
+
 const data = {
     service: {
         id: 1,
@@ -661,16 +679,6 @@ const component = mount(
     </DataProvider>
 );
 
-// Mock fetchers to prevent network requests
-jest.mock('../../fetchers');
-
-// Mock route params
-jest.mock("react-router-dom", () => ({
-    useParams: () => ({
-        id: 1
-    })
-}));
-
 describe('<Service />', () => {
     it('should render the service with a page header', () => {
         expect(component.find('PageHeader')).toHaveLength(1);
@@ -688,7 +696,6 @@ describe('<Service />', () => {
         fetchService.mockReturnValue(data);
 
         // Use act to test first render and componentDidMount to simulate React works in the browser.
-        // For example; Invoking act again would simulate componentDidUpdate
         const componentWithNotification = await act(async () => {
             mount(
                 <DataProvider data={{}}>
@@ -696,6 +703,9 @@ describe('<Service />', () => {
                 </DataProvider>
             );
         });
+
+        // Simulate componentDidUpdate, this event would occur once the data has been fetched
+        componentWithNotification.update();
 
         expect(component.find('PageHeader')).toHaveLength(1);
         expect(component.find('PageHeader').text()).toBe(data.service.name);
