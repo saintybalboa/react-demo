@@ -1,7 +1,6 @@
 # React Demo
 
-React Demo is a universal web app built with [React](
-React – A JavaScript library for building user interfacesreactjs.org).
+React Demo is a universal web app built with [React](https://reactjs.org/).
 
 
 ## Tutorial
@@ -21,6 +20,8 @@ This tutorial takes you through the process of building a react universal web ap
 - [Context](docs/tutorial/6-context.md)
 
 - [Routing](docs/tutorial/7-routing.md)
+
+- [Metadata](docs/tutorial/8-metadata.md)
 
 
 ### [Start the tutorial &#8594;](./docs/tutorial/1-setup.md)

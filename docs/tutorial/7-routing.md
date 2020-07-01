@@ -723,7 +723,7 @@ npm run test:unit
 Validate all tests pass.
 
 
-#### [&#8592; Previous: Context ](./6-context.md)
+#### [&#8592; Previous: Context ](./6-context.md) | [Next: Metadata &#8594;](./8-metadata.md)
 
 
 ## Resources
