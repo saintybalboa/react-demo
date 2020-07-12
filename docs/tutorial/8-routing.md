@@ -242,6 +242,7 @@ Update `src/components/App/App.jsx`:
 ```js
 import './App.scss';
 import React from 'react';
+import Logo from '../../assets/images/logo.svg';
 import { Route, Switch, NavLink } from 'react-router-dom';
 import routes from '../../routes';
 
@@ -249,13 +250,15 @@ function App() {
     // Use the Switch component to render the first route that matches the request path.
     return (
         <div className="app">
-            <span>React Demo</span>
-            <ul>
-                <li><NavLink to="/">Home</NavLink></li>
-                <li><NavLink to="/services/1">App</NavLink></li>
-                <li><NavLink to="/services/2">Web</NavLink></li>
-                <li><NavLink to="/services/3">Design</NavLink></li>
-            </ul>
+            <Logo className="logo" />
+            <nav>
+                <ul>
+                    <li><NavLink to="/">Home</NavLink></li>
+                    <li><NavLink to="/services/1">App</NavLink></li>
+                    <li><NavLink to="/services/2">Web</NavLink></li>
+                    <li><NavLink to="/services/3">Design</NavLink></li>
+                </ul>
+            </nav>
 
             <Switch>
                 {routes.map(({ path, exact, component: PageComponent, ...rest }) => (
@@ -272,6 +275,23 @@ function App() {
 }
 
 export default App;
+```
+
+Update `src/components/App/App.scss`:
+```scss
+...
+nav {
+    border-bottom: 1px solid $color;
+
+    > ul {
+        list-style: none;
+
+        > li {
+            display: inline;
+            padding: 20px;
+        }
+    }
+}
 ```
 
 Initial data for each page is now fetched server-side; The data also needs to be fetched client-side due to page navigation being handled by React on the client.
@@ -723,7 +743,7 @@ npm run test:unit
 Validate all tests pass.
 
 
-#### [&#8592; Previous: Context ](./6-context.md) | [Next: Metadata &#8594;](./8-metadata.md)
+#### [&#8592; Previous: Context ](./7-context.md) | [Next: Metadata &#8594;](./9-metadata.md)
 
 
 ## Resources

@@ -43,6 +43,10 @@ import App from '.';
 const component = mount(<App />);
 
 describe('<App />', () => {
+    it('should render a logo', () => {
+        expect(component.find('Logo')).toHaveLength(1);
+    });
+
     it('should render a page heading', () => {
         expect(component.find('h1')).toHaveLength(1);
         expect(component.find('h1').text()).toBe('React Demo');
@@ -67,7 +71,7 @@ npm run test:unit
 ```
 
 
-#### [&#8592; Previous: Styling ](./2-styling.md) | [Next: Components &#8594;](./4-components.md)
+#### [&#8592; Previous: Images ](./3-images.md) | [Next: Components &#8594;](./5-components.md)
 
 
 ## Resources

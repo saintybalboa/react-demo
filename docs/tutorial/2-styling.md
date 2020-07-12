@@ -13,7 +13,6 @@ Create `src/assets/scss/variables.scss`:
 // Manage shared variables
 $font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 $font-size: 12px;
-$background: #f5f7fb;
 $color: #495057;
 ```
 
@@ -26,8 +25,8 @@ Create `src/components/App/App.scss`:
 body {
     font-family: $font-family;
     color: $color;
-    background-color: $background;
     font-size: $font-size;
+    text-align: center;
 }
 ```
 
@@ -114,7 +113,7 @@ npm run build:server
 
 Validate `public/css/index.css` exists with the following styles:
 ```css
-body{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;color:#495057;background-color:#f5f7fb;font-size:12px}
+body{font-family:"Source Sans Pro",-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;color:#495057;font-size:12px;text-align: center;}
 ```
 
 Start the application server:
@@ -289,7 +288,7 @@ npm run dev:client
 Change the styles in `src/assets/scss/variables.scss` to see changes automatically applied.
 
 
-#### [&#8592; Previous: Setup ](./1-setup.md) | [Next: Testing &#8594;](./3-testing.md)
+#### [&#8592; Previous: Setup ](./1-setup.md) | [Next: Images &#8594;](./3-images.md)
 
 
 ## Resources

@@ -311,7 +311,7 @@ Validate the correct content is rendered.
 As data requirements grow, it is not ideal to manage data in both `src/server.js` and `webpack.dev.config`. The next part of the tutorial provides a solution to this problem.
 
 
-#### [&#8592; Previous: Storybook ](./5-storybook.md) | [Next: Routing &#8594;](./7-routing.md)
+#### [&#8592; Previous: Storybook ](./6-storybook.md) | [Next: Routing &#8594;](./8-routing.md)
 
 
 ## Resources

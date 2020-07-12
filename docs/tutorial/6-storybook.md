@@ -60,7 +60,7 @@ import { addDecorator } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';
 import '../src/components/App/App.scss'; // Import global styles
 
-// Use the addons/knobs decorator to allow the page heading to be dynamically updated within Storybook
+// Use the addons/knobs decorator to allow properties of components to be updated with forms within Storybook
 addDecorator(withKnobs);
 ```
 
@@ -122,7 +122,7 @@ export default {
     }
 };
 
-// Use the text knob to define a text input for updating the page header within Storybook
+// Use the text knob to define a text input for updating the page content within Storybook
 export const pageContent = () => (
     <PageContent>
         <p>{text('Content', 'Example page content...')}</p>
@@ -146,7 +146,8 @@ export default {
     }
 };
 
-// Use the text knob to define a text input for updating the page header within Storybook
+// Use the text knob to define a text input for updating the notification message within Storybook
+// Use the select knob to define a select box for changing the notification type within Storybook
 export const notification = () => (
     <Notification
         type={select('Type', config.notification.types, '-')}
@@ -166,7 +167,7 @@ Experiment using the knobs to change te components appearance:
 ![Image of Storybook using addons/knobs](screenshots/storybook.png)
 
 
-#### [&#8592; Previous: Components](./4-components.md) | [Next: Context &#8594;](./6-context.md)
+#### [&#8592; Previous: Components](./5-components.md) | [Next: Context &#8594;](./7-context.md)
 
 
 ## Resources

@@ -282,7 +282,7 @@ import { HelmetProvider } from 'react-helmet-async';
 renderMethod(
     // Set the data that originated on the server, down to the client.
     // Use the BrowserRouter to handle client-side routing
-    // Use HelmetProvider to determine whether the metadata needs to be rendered client-side
+    // Use HelmetProvider so that state can be encapsulated for Helmet to work server-side and client-side
     <BrowserRouter>
         <HelmetProvider>
             <DataProvider data={window.__INITIAL_DATA__}>
@@ -542,7 +542,7 @@ describe('<Service />', () => {
 ```
 
 
-#### [&#8592; Previous: Routing ](./7-routing.md)
+#### [&#8592; Previous: Routing ](./8-routing.md)
 
 
 ## Resources

@@ -11,17 +11,19 @@ This tutorial takes you through the process of building a react universal web ap
 
 - [Styling](docs/tutorial/2-styling.md)
 
-- [Testing](docs/tutorial/3-testing.md)
+- [Images](docs/tutorial/3-images.md)
 
-- [Components](docs/tutorial/4-components.md)
+- [Testing](docs/tutorial/4-testing.md)
 
-- [Storybook](docs/tutorial/5-storybook.md)
+- [Components](docs/tutorial/5-components.md)
 
-- [Context](docs/tutorial/6-context.md)
+- [Storybook](docs/tutorial/6-storybook.md)
 
-- [Routing](docs/tutorial/7-routing.md)
+- [Context](docs/tutorial/7-context.md)
 
-- [Metadata](docs/tutorial/8-metadata.md)
+- [Routing](docs/tutorial/8-routing.md)
+
+- [Metadata](docs/tutorial/9-metadata.md)
 
 
 ### [Start the tutorial &#8594;](./docs/tutorial/1-setup.md)

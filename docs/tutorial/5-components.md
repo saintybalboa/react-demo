@@ -424,6 +424,7 @@ Update `src/components/App/App.jsx`:
 ```js
 import './App.scss';
 import React from 'react';
+import Logo from '../../assets/images/logo.svg';
 import Homepage from '../../pages/Homepage';
 
 function App() {
@@ -493,7 +494,7 @@ npm run start
 Validate the content is rendered on the page.
 
 
-#### [&#8592; Previous: Testing](./3-testing.md) | [Next: Storybook &#8594;](./5-storybook.md)
+#### [&#8592; Previous: Testing](./4-testing.md) | [Next: Storybook &#8594;](./6-storybook.md)
 
 
 ## Resources
