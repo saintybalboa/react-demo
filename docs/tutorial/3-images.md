@@ -238,7 +238,7 @@ Validate the logo, banner and background images are rendered on the page.
 
 ### Frontend development
 
-Configure webpack dev server to handle `.scss` imports.
+Configure webpack dev server to handle image file imports.
 
 Update `webpack.dev.config.js`:
 ```js
