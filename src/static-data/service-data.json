@@ -1,0 +1,41 @@
+[
+    {
+        "id": "1",
+        "name": "App",
+        "items": [
+            "iOS",
+            "Android",
+            "Windows"
+        ],
+        "metadata": {
+            "description": "Develope mobile applications across the major platforms.",
+            "keywords": "iOS,Android,Windows"
+        }
+    },
+    {
+        "id": "2",
+        "name": "Web",
+        "items": [
+            "Hosting",
+            "Domain Names",
+            "Maintenance"
+        ],
+        "metadata": {
+            "description": "Host your domain with a reputable Cloud Provider.",
+            "keywords": "hosting,domain,maintenance,cloud"
+        }
+    },
+    {
+        "id": "3",
+        "name": "Design",
+        "items": [
+            "Logo",
+            "Website",
+            "Adverts"
+        ],
+        "metadata": {
+            "description": "Create a brand to represent your company.",
+            "keywords": "logo,website,adverts"
+        }
+    }
+]

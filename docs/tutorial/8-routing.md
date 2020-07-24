@@ -152,7 +152,6 @@ Update `src/server.js`:
 import { StaticRouter, matchPath } from "react-router-dom";
 import axios from 'axios';
 import routes from './routes';
-import homepageData from './static-data/homepage-data.json';
 import serviceData from './static-data/service-data.json';
 
 const app = express();
@@ -183,7 +182,7 @@ router.get('/*', async (req, res) => {
     }
 
     const data = {
-        page: pageData,
+        ...pageData,
         notification: {
             type: 'info',
             message: 'Example page notification.'
@@ -240,9 +239,7 @@ renderMethod(
 
 Update `src/components/App/App.jsx`:
 ```js
-import './App.scss';
-import React from 'react';
-import Logo from '../../assets/images/logo.svg';
+...
 import { Route, Switch, NavLink } from 'react-router-dom';
 import routes from '../../routes';
 
@@ -259,7 +256,7 @@ function App() {
                     <li><NavLink to="/services/3">Design</NavLink></li>
                 </ul>
             </nav>
-
+            <img src={BannerImage} alt="React Demo banner" />
             <Switch>
                 {routes.map(({ path, exact, component: PageComponent, ...rest }) => (
                     <Route
@@ -281,8 +278,6 @@ Update `src/components/App/App.scss`:
 ```scss
 ...
 nav {
-    border-bottom: 1px solid $color;
-
     > ul {
         list-style: none;
 
@@ -490,7 +485,7 @@ module.exports = {
         }
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(), // Refresh html changes without reloading the page in browser
+        ...
         new HtmlWebpackPlugin({
             templateContent: template('', [], config.styles, null)
         })
@@ -504,7 +499,7 @@ Start the application server:
 npm run dev:server
 ```
 
-Start webpack dev server:
+Open another terminal and start webpack dev server:
 ```bash
 npm run dev:client
 ```
@@ -543,14 +538,13 @@ import { Wrapper } from '../../tests/utils.js';
 import App from '.';
 
 describe('<App />', () => {
-    it('should render the app name', () => {
+    it('should render a logo', () => {
         const component = mount(
             <Wrapper location='/' data={{ page: { title: 'title', content: 'content'}}}>
                 <App />
             </Wrapper>
         );
-        expect(component.find('span')).toHaveLength(1);
-        expect(component.find('span').text()).toBe('React Demo');
+        expect(component.find('Logo')).toHaveLength(1);
     });
 
     it('should render the homepage', () => {
@@ -666,8 +660,8 @@ Create `src/pages/Service/Service.test.js`:
 import React from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
-import { DataProvider } from '../../contexts/data-context';
 import { fetchService } from '../../fetchers';
+import { Wrapper } from '../../tests/utils.js';
 import Service from '.';
 
 // Mock fetchers to prevent network requests
@@ -694,9 +688,9 @@ const data = {
 };
 
 const component = mount(
-    <DataProvider data={data}>
+    <Wrapper location='/services/1' data={data}>
         <Service />
-    </DataProvider>
+    </Wrapper>
 );
 
 describe('<Service />', () => {
@@ -715,29 +709,31 @@ describe('<Service />', () => {
         // Mock api response
         fetchService.mockReturnValue(data);
 
+        let componentWithNoInitialData;
         // Use act to test first render and componentDidMount to simulate React works in the browser.
-        const componentWithNotification = await act(async () => {
-            mount(
-                <DataProvider data={{}}>
+        // For example; Invoking act again would simulate componentDidUpdate
+        await act(async () => {
+            componentWithNoInitialData = mount(
+                <Wrapper location='/services/1'>
                     <Service />
-                </DataProvider>
+                </Wrapper>
             );
         });
 
         // Simulate componentDidUpdate, this event would occur once the data has been fetched
-        componentWithNotification.update();
+        componentWithNoInitialData.update();
 
-        expect(component.find('PageHeader')).toHaveLength(1);
-        expect(component.find('PageHeader').text()).toBe(data.service.name);
-        expect(component.find('PageContent')).toHaveLength(1);
-        expect(component.find('PageContent').text()).toBe(data.service.items.join(''));
+        expect(componentWithNoInitialData.find('PageHeader')).toHaveLength(1);
+        expect(componentWithNoInitialData.find('PageHeader').text()).toBe(data.service.name);
+        expect(componentWithNoInitialData.find('PageContent')).toHaveLength(1);
+        expect(componentWithNoInitialData.find('PageContent').text()).toBe(data.service.items.join(''));
     });
 });
 ```
 
 Run tests:
 ```bash
-npm run test:unit
+npm run test
 ```
 
 Validate all tests pass.

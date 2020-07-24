@@ -10,7 +10,7 @@ Set the background image for the page.
 
 Update `src/components/App/App.scss`:
 ```scss
-@import '../../assets/scss/variables';
+...
 
 body {
     ...
@@ -46,7 +46,24 @@ Configure webpack to handle jpg and png file imports.
 
 Install the following dev dependencies:
 ```bash
-npm install url-loader --save-dev
+npm install url-loader file-loader babel-plugin-file-loader --save-dev
+```
+
+Configure Babel to resolve image file imports at runtime:
+
+Update `.babelrc`:
+```json
+{
+    ...
+    "plugins": [
+        ...
+        ["file-loader", {
+            "extensions": ["png", "jpg", "jpeg"],
+            "publicPath" : "/images",
+            "outputPath": "./public/images"
+        }]
+    ]
+}
 ```
 
 Update `webpack.client.config.js`:
@@ -67,7 +84,7 @@ module.exports = {
                         // Generates image file and specifies URL path to image in the src when the limit is exceeded.
                         limit: 10000,
                         publicPath: '/images', // Relative URL path for images
-                        outputPath: '../images' // Relative folder path to store generated image files
+                        outputPath: './public/images' // Relative folder path to store generated image files
                     }
                 }
             }
@@ -95,10 +112,10 @@ module.exports = {
                         // Generates image file and specifies URL path to image in the src when the limit is exceeded.
                         limit: 10000,
                         publicPath: '/images', // Relative URL path for images
-                        outputPath: '../images' // Relative folder path to store generated image files
+                        outputPath: './public/images' // Relative folder path to store generated image files
                     }
                 }
-            },
+            }
         ]
     }
     ...
@@ -115,6 +132,7 @@ Update `src/components/App/App.jsx`:
 ```js
 import './App.scss';
 import React from 'react';
+import BannerImage from '../../assets/images/banner.png';
 import Logo from '../../assets/images/logo.svg';
 
 function App() {
@@ -205,7 +223,7 @@ npm run start
 Validate the logo, banner and background images are rendered on the page.
 
 ### Backend development
-Configure Babel to resolve image file imports at runtime:
+Configure Babel to resolve svg file imports at runtime:
 
 Install the following dev dependencies:
 ```bash
@@ -218,11 +236,6 @@ Update `.babelrc`:
     ...
     "plugins": [
         ...
-        ["file-loader", {
-            "extensions": ["png", "jpg", "jpeg"],
-            "publicPath" : "/images",
-            "outputPath": "./public/images"
-        }],
         ["inline-react-svg"]
     ]
 }
@@ -234,7 +247,6 @@ npm run dev:server
 ```
 
 Validate the logo, banner and background images are rendered on the page.
-
 
 ### Frontend development
 
@@ -254,7 +266,7 @@ module.exports = {
                     options: {
                         // Fall back to file-loader if the data URL increases the bundle size larger than limit (bytes)
                         // Generates image file and specifies URL path to image in the src when the limit is exceeded.
-                        limit: 10000,
+                        limit: 1000,
                         publicPath: '/images', // Relative URL path for images
                         outputPath: 'images' // Relative folder path to store image files to (webpack dev server in memory)
                     }

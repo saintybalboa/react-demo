@@ -84,12 +84,36 @@ Update `src/components/App/App.jsx`:
 ...
 function App() {
     return (
-        <div className="app">
+        <>
+            <Logo className="logo" />
+            <hr />
             <span>React Demo</span>
+            <hr />
+            <img src={BannerImage} alt="React Demo banner" />
             <Homepage />
-        </div>
+        </>
     );
 }
+...
+```
+
+Update `src/components/App/App.test.js`:
+```js
+...
+import { DataProvider } from '../../contexts/data-context';
+import homepageData from '../../static-data/homepage-data.json';
+
+const data = {
+    page: homepageData
+};
+
+// Re-mount the component, if it is not currently mounted. Ensures the component renders it's content.
+const component = mount(
+    <DataProvider data={data}>
+        <App />
+    </DataProvider>
+);
+
 ...
 ```
 
@@ -257,7 +281,7 @@ renderMethod(
 
 Run tests:
 ```bash
-npm run test:unit
+npm run test
 ```
 
 Validate all tests pass.
@@ -292,9 +316,9 @@ const homepageData = require('./src/static-data/homepage-data.json');
 module.exports = {
     ...
     plugins: [
-        new webpack.HotModuleReplacementPlugin(), // Refresh html changes without reloading the page in browser
+        ...
         new HtmlWebpackPlugin({
-            templateContent: template('', [], config.styles, homepageData)
+            templateContent: template('', [], config.styles, { page: homepageData })
         })
     ],
     ...

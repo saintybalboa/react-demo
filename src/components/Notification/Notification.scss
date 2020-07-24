@@ -1,0 +1,28 @@
+@import '../../assets/scss/variables';
+
+.notification {
+    position: relative;
+    padding: .5rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .10rem;
+    background: lighten($color, $lighter);
+    color: darken($color, $darker);
+
+    &--success {
+        background: lighten(map-get($colors, 'success'), $lighter);
+        color: darken(map-get($colors, 'success'), $darker);
+    }
+    &--error {
+        background: lighten(map-get($colors, 'error'), $lighter);
+        color: darken(map-get($colors, 'error'), $darker);
+    }
+    &--info {
+        background: lighten(map-get($colors, 'info'), $lighter);
+        color: darken(map-get($colors, 'info'), $darker);
+    }
+    &--warning {
+        background: lighten(map-get($colors, 'warning'), $lighter);
+        color: darken(map-get($colors, 'warning'), $darker);
+    }
+}

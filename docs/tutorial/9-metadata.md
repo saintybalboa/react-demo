@@ -253,8 +253,8 @@ router.get('/*', async (req, res) => {
     // Use HelmetProvider so that state can be encapsulated for Helmet to work server-side and client-side
     const markup = renderToString(
         <StaticRouter location={req.url} context={{}}>
-            <HelmetProvider context={{}}>
-                <DataProvider data={initialData}>
+            <HelmetProvider context={helmetContext}>
+                <DataProvider data={data}>
                     <App />
                 </DataProvider>
             </HelmetProvider>
@@ -351,8 +351,47 @@ Update `src/components/App/App.test.js`:
 ```js
 ...
 
+const mockHomepageData = {
+    page: {
+        title: 'title',
+        content: 'content',
+        metadata: {
+            description: "React demo is a universal web app built with react.",
+            keywords: "React,demo,universal,web,app"
+        }
+    }
+};
+
+const mockServiceData = {
+    service: {
+        id: 1,
+        name: 'service',
+        items: ['content'],
+        metadata: {
+            description: 'Host your domain with a reputable Cloud Provider.',
+            keywords: 'hosting,domain,maintenance,cloud'
+        }
+    }
+};
+
 describe('<App />', () => {
-    ...
+    it('should render a logo', () => {
+        const component = mount(
+            <Wrapper location='/' data={mockHomepageData}>
+                <App />
+            </Wrapper>
+        );
+        expect(component.find('Logo')).toHaveLength(1);
+    });
+
+    it('should render the homepage', () => {
+        const component = mount(
+            <Wrapper location='/' data={mockHomepageData}>
+                <App />
+            </Wrapper>
+        );
+        expect(component.find('Homepage')).toHaveLength(1);
+    });
 
     it('should render the service page', () => {
         // Mock route params
@@ -361,19 +400,9 @@ describe('<App />', () => {
                 id: 1
             })
         }));
-        const data = {
-            service: {
-                id: 1,
-                name: 'service',
-                items: ['content'],
-                metadata: {
-                    description: 'Host your domain with a reputable Cloud Provider.',
-                    keywords: 'hosting,domain,maintenance,cloud'
-                }
-            }
-        };
+
         const component = mount(
-            <Wrapper location='/services/2' data={data}>
+            <Wrapper location='/services/2' data={mockServiceData}>
                 <App />
             </Wrapper>
         );
@@ -396,7 +425,11 @@ jest.mock('../../fetchers');
 const data = {
     page: {
         title: 'Test heading',
-        content: 'Test content'
+        content: 'Test content',
+        metadata: {
+            description: "React demo is a universal web app built with react.",
+            keywords: "React,demo,universal,web,app"
+        }
     }
 };
 
@@ -540,6 +573,13 @@ describe('<Service />', () => {
     });
 });
 ```
+
+Run tests:
+```bash
+npm run test
+```
+
+Validate all tests pass.
 
 
 #### [&#8592; Previous: Routing ](./8-routing.md)

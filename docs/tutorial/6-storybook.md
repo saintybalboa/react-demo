@@ -51,6 +51,7 @@ module.exports = {
     });
 
     return config;
+  }
 };
 ```
 
@@ -64,12 +65,13 @@ import '../src/components/App/App.scss'; // Import global styles
 addDecorator(withKnobs);
 ```
 
-Add the following script entry to `package.json`:
+Update the following script entry in `package.json`:
 ```json
 {
     ...
     "scripts": {
-        "storybook": "start-storybook -p 4060"
+        "storybook": "start-storybook -p 4060",
+        ...
     },
     ...
 }

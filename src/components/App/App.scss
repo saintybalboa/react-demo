@@ -1,0 +1,25 @@
+@import '../../assets/scss/variables';
+
+body {
+    font-family: $font-family;
+    color: $color;
+    font-size: $font-size;
+    text-align: center;
+    background: url('../../assets/images/background.jpg');
+}
+
+.logo {
+    fill: $color;
+    height: 3rem;
+}
+
+nav {
+    > ul {
+        list-style: none;
+
+        > li {
+            display: inline;
+            padding: 20px;
+        }
+    }
+}

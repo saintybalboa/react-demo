@@ -156,7 +156,7 @@ hydrate(<App />, document.getElementById('root'));
 
 Install dependencies:
 ```bash
-npm install @babel/register @babel/cli @babel/core @babel/node @babel/polyfill @babel/preset-env @babel/preset-react babel-loader --save-dev
+npm install @babel/register @babel/cli @babel/core @babel/node @babel/polyfill @babel/preset-env @babel/preset-react babel-loader @babel/plugin-transform-runtime --save-dev
 ```
 
 Create `.babelrc` with the following:
@@ -188,7 +188,7 @@ Create `.babelrc` with the following:
 
 - **@babel/plugin-proposal-object-rest-spread:** Cater for [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
 
-- **@babel/plugin-transform-runtime:** Enables the re-use of Babel's injected helper code to save on codesize.
+- **@babel/plugin-transform-runtime:** Enable the re-use of Babel's injected helper code to save on codesize.
 
 ### Setup Webpack
 
@@ -210,8 +210,8 @@ module.exports = {
         client: ['./src/client.js']
     },
     output: {
-        path: path.resolve(__dirname, './', 'public/js'), // Destination folder for the client side bundled output is /public/js/
-        filename: '[name].js' // Saves the following bundled files to the destination folder: client.js, vendor.js
+        path: path.resolve(__dirname, './'), // Set to root of project
+        filename: 'public/js/[name].js' // Saves the following bundled files to the destination folder /public/js/: client.js, vendor.js
     },
     module: {
         rules: [
@@ -257,7 +257,6 @@ Validate the following script files were created in `public/js`:
 Add the relative script url paths to `src/config.js`:
 ```js
 export default {
-    ...
     scripts: [
         '/js/client.js',
         '/js/vendor.js'
@@ -276,8 +275,8 @@ module.exports = {
         server: ['./src/server.js']
     },
     output: {
-        path: path.resolve(__dirname, './', 'build'), // Destination for the server side bundled output is under ./build
-        filename: '[name].js' // Saves the following bundled file to the destination folder
+        path: path.resolve(__dirname, './'), // Set to root of project
+        filename: 'build/[name].js' // Saves the following bundled files to the destination folder build/server.js
     },
     module: {
         rules: [
@@ -364,13 +363,7 @@ Start the application server for local development:
 npm run dev:server
 ```
 
-Make a change to `src/server.js` and view the log output in the terminal:
-```js
-...
-server.on('listening', () => console.log(`Server restarted at http://${host}:${port}`));
-...
-```
-
+Make a change to `src/server.js` and view the log output in the terminal.
 
 ### Frontend development
 Speed up frontend development by utilising the following:
@@ -394,7 +387,6 @@ require('@babel/register'); // Required to transpile React code in template.js
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const config = require('./src/config').default;
 const template = require('./src/template').default;
 
 // Configuration for webpack-dev-server
@@ -402,9 +394,9 @@ module.exports = {
     mode: 'development',
     entry: ['react-hot-loader/patch', './src/client.js'],
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, './'),
         publicPath: '/',
-        filename: '[name].bundle.js'
+        filename: 'dist/[name].bundle.js'
     },
     devtool: 'inline-source-map', // Return error details (e.g. line no.) from the source file not the file bundled by webpack
     devServer: {

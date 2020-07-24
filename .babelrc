@@ -13,11 +13,14 @@
         ]
     ],
     "plugins": [
-        ["@babel/plugin-proposal-class-properties"],
-        ["@babel/plugin-transform-runtime"],
-        ["@babel/plugin-syntax-dynamic-import"],
         ["@babel/plugin-proposal-object-rest-spread"],
+        ["@babel/plugin-transform-runtime"],
         ["postcss-css-modules", { "extensions": [".scss"] }],
-        ["react-hot-loader/babel"]
+        ["file-loader", {
+            "extensions": ["png", "jpg", "jpeg"],
+            "publicPath" : "/images",
+            "outputPath": "./public/images"
+        }],
+        ["inline-react-svg"]
     ]
 }

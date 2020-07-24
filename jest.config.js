@@ -1,8 +1,10 @@
 module.exports = {
     setupFilesAfterEnv: [
+        // Configuration file executed before tests at runtime.
         '<rootDir>/src/setup-test.js'
     ],
     moduleNameMapper: {
-        '^.+\\.(css|less|scss)$': 'babel-jest'
+        // Stub out styles (sass imports) to prevent syntax errors.
+        '^.+\\.(scss)$': 'babel-jest'
     }
 };

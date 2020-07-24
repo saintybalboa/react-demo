@@ -99,7 +99,7 @@ module.exports = {
     plugins: [
         new MiniCssExtractPlugin({
           // Save to a static css file in the public directory
-          filename: '../public/css/index.css'
+          filename: './public/css/index.css'
         })
     ]
     ...
@@ -171,7 +171,6 @@ export default function(markup, scripts, styles) {
     // <!doctype html> syntax is invalid inside a react component
     return `<!DOCTYPE html>${htmlDocument}`;
 }
-...
 ```
 
 Update `src/server.js`:
@@ -256,6 +255,10 @@ Configure webpack dev server to handle `.scss` imports.
 Update `webpack.dev.config.js`:
 ```js
 ...
+const config = require('./src/config').default;
+
+...
+
 module.exports = {
     module: {
         rules: [

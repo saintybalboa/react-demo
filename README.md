@@ -5,7 +5,7 @@ React Demo is a universal web app built with [React](https://reactjs.org/).
 
 ## Tutorial
 
-This tutorial takes you through the process of building a react universal web app. It assumes that you have some basic knowledge of React and JavaScript. The tutorial covers the following areas:
+This tutorial takes you through the process of building a react universal web app. It assumes that you have some basic knowledge of React and JavaScript (es6). The tutorial covers the following areas:
 
 - [Setup](docs/tutorial/1-setup.md)
 

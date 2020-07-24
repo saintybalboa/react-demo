@@ -8,8 +8,8 @@ module.exports = {
         server: ['./src/server.js']
     },
     output: {
-        path: path.resolve(__dirname, './', 'build'), // Destination for the server side bundled output is under ./build
-        filename: '[name].js' // Saves the following bundled file to the destination folder
+        path: path.resolve(__dirname, './'), // Set to root of project
+        filename: 'build/[name].js' // Saves the following bundled files to the destination folder build/server.js
     },
     module: {
         rules: [
@@ -30,24 +30,35 @@ module.exports = {
                     { loader: 'css-loader' }, // Interprets @import/url() as import/require() within the js and resolves them
                     { loader: 'sass-loader' } // Loads a Sass/SCSS file and compiles it to CSS.
                 ],
-                exclude: [/node_modules/]
+                exclude: [/node_modules/, /public/, /build/]
+            },
+            {
+                test: /\.(jpg|jpeg|png)$/,
+                use: {
+                    loader: 'url-loader', // Inline the images as data URLs to elminate the added the network request.
+                    options: {
+                        // Fall back to file-loader if the data URL increases the bundle size larger than limit (bytes)
+                        // Generates image file and specifies URL path to image in the src when the limit is exceeded.
+                        limit: 10000,
+                        publicPath: '/images', // Relative URL path for images
+                        outputPath: './public/images' // Relative folder path to store generated image files
+                    }
+                }
+            },
+            {
+                test: /\.svg$/,
+                use: { loader: '@svgr/webpack' } // Inlines the images as data URLs to elminate the added the network request
             }
         ]
     },
-    target: 'node',
-    node: {
-        // Need this when working with express, otherwise the build fails
-        __dirname: false,
-        __filename: false
-    },
+    target: "node", // Compile for usage in a Node.Js environment.
     resolve: {
-        // Resolve extensions of files with the same name in the following order:
         extensions: ['.js', '.jsx', '.json']
     },
     plugins: [
         new MiniCssExtractPlugin({
           // Save to a static css file in the public directory
-          filename: '../public/css/index.css'
+          filename: './public/css/index.css'
         })
     ]
 };

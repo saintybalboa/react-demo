@@ -52,7 +52,7 @@ Create `src/components/PageHeader/index.js`:
 export { default } from './PageHeader';
 ```
 
-Create `src/components/PageHeader/PageHeader.test.jsx`:
+Create `src/components/PageHeader/PageHeader.test.js`:
 ```js
 import React from 'react';
 import { mount } from 'enzyme';
@@ -424,13 +424,18 @@ Update `src/components/App/App.jsx`:
 ```js
 import './App.scss';
 import React from 'react';
+import BannerImage from '../../assets/images/banner.png';
 import Logo from '../../assets/images/logo.svg';
 import Homepage from '../../pages/Homepage';
 
 function App() {
     return (
         <>
+            <Logo className="logo" />
+            <hr />
             <span>React Demo</span>
+            <hr />
+            <img src={BannerImage} alt="React Demo banner" />
             <Homepage
                 page={{
                     title: 'Welcome to the React Demo',
@@ -458,6 +463,10 @@ import App from '.';
 const component = mount(<App />);
 
 describe('<App />', () => {
+    it('should render a logo', () => {
+        expect(component.find('Logo')).toHaveLength(1);
+    });
+
     it('should render the app name', () => {
         expect(component.find('span')).toHaveLength(1);
         expect(component.find('span').text()).toBe('React Demo');
@@ -471,7 +480,7 @@ describe('<App />', () => {
 
 Run tests:
 ```bash
-npm run test:unit
+npm run test
 ```
 
 Validate all tests pass.

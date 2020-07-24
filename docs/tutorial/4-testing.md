@@ -54,20 +54,20 @@ describe('<App />', () => {
 });
 ```
 
-Add the following script entry to `package.json`:
+Update the following script entry in `package.json`:
 ```json
 {
     ...
     "scripts": {
+        "test": "jest src",
         ...
-        "test:unit": "jest --coverage src",
     }
 }
 ```
 
 Run tests:
 ```bash
-npm run test:unit
+npm run test
 ```
 
 
