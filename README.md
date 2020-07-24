@@ -2,6 +2,75 @@
 
 React Demo is a universal web app built with [React](https://reactjs.org/).
 
+## Setup
+
+Supports the node version specified in [.nvmrc](.nvmrc)
+
+Install global dependencies:
+```bash
+npm install -g webpack webpack-cli
+```
+
+Install package dependencies:
+```bash
+npm install
+```
+
+Build application source code:
+```bash
+npm run build:client
+npm run build:server
+```
+
+Start the application:
+```bash
+npm run start
+```
+
+Open the React Demo in a browser: http://localhost:4040/
+
+### Local development
+
+Install global dependencies:
+```bash
+npm install nodemon webpack-dev-server -g
+```
+
+Start the application server for local development:
+```bash
+npm dev:server
+```
+
+Open another terminal and startup Webpack dev server for local frontend development:
+```bash
+npm dev:client
+```
+
+The React Demo should automatically be opened in the browser: http://localhost:4000/
+
+### Tests
+
+Install global dependencies:
+```bash
+npm install jest -g
+```
+
+Run unit tests:
+```bash
+npm run test
+```
+
+### Storybook
+
+Install global dependencies:
+```bash
+npm install @storybook/cli -g
+```
+
+Run storybook:
+```bash
+npm run storybook
+```
 
 ## Tutorial
 
@@ -27,15 +96,6 @@ This tutorial takes you through the process of building a react universal web ap
 
 
 ### [Start the tutorial &#8594;](./docs/tutorial/1-setup.md)
-
-
-## Further reading
-
-https://reactjs.org/docs/getting-started.html
-
-https://reacttraining.com/react-router/web/guides/quick-start
-
-
 
 
 
