@@ -2,11 +2,13 @@ import './App.scss';
 import React from 'react';
 import BannerImage from '../../assets/images/banner.png';
 import Logo from '../../assets/images/logo.svg';
-import { Route, Switch, NavLink } from 'react-router-dom';
+import { useRoutes, NavLink } from 'react-router-dom';
 import routes from '../../routes';
 
 function App() {
-    // Use the Switch component to render the first route that matches the request path.
+    // Get output for the first route that matches the request path.
+    const renderRoute = useRoutes(routes);
+
     return (
         <div className="app">
             <Logo className="logo" />
@@ -19,16 +21,7 @@ function App() {
                 </ul>
             </nav>
             <img src={BannerImage} alt="React Demo banner" />
-            <Switch>
-                {routes.map(({ path, exact, component: PageComponent, ...rest }) => (
-                    <Route
-                        key={path}
-                        path={path}
-                        exact={exact}
-                        render={(props) => (<PageComponent {...props} {...rest} />)}
-                    />
-                ))}
-            </Switch>
+            {renderRoute}
         </div>
     );
 }

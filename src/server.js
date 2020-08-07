@@ -6,7 +6,8 @@ import App from './components/App';
 import template from './template';
 import config from './config';
 import { DataProvider } from './contexts/data-context';
-import { StaticRouter, matchPath } from "react-router-dom";
+import { StaticRouter } from "react-router-dom/server";
+import { matchRoutes } from "react-router";
 import homepageData from './static-data/homepage-data.json';
 import axios from 'axios';
 import routes from './routes';
@@ -27,17 +28,16 @@ router.get('/api/services/:id', async (req, res) => {
 
 // Handle all routes
 router.get('/*', async (req, res) => {
-    // Use "matchPatch" to match the request path to a route.
-    const currentRoute = routes.find((route) => matchPath(req.url, route)) || {};
-
-    // Get request data for the matching route
-    const requestData = matchPath(req.url, currentRoute);
+    // Use "matchRoutes" to get the current route config
+    const matchingRoutes = matchRoutes(routes, req.url);
+    // Set to first matching route
+    const currentRoute = (matchingRoutes && matchingRoutes[0]) || {};
 
     // Fetch initial page data if the current route has been configured with a data fetcher
     let pageData = {};
 
-    if (currentRoute.fetchInitialData) {
-        pageData = await currentRoute.fetchInitialData(requestData && requestData.params);
+    if (currentRoute.route && currentRoute.route.fetchInitialData) {
+        pageData = await currentRoute.route.fetchInitialData(currentRoute.params);
     }
 
     const data = {

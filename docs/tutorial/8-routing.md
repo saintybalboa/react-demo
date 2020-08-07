@@ -27,6 +27,12 @@ How it works:
 
 ## Setup
 
+**Todo: remove the dependencies once react router v6 is released**
+Install the following dependencies:
+```bash
+npm install history react-router-dom@next
+```
+
 A service page will be created to demonstrate dynamic routing and allow page navigation between the homepage and the service page.
 
 Create `src/pages/Service/Service.jsx`:
@@ -120,6 +126,7 @@ export { default as fetchService } from './service';
 
 Create the shared route config `src/routes.js`.
 ```js
+import React from 'react';
 import Homepage from './pages/Homepage';
 import Service from './pages/Service';
 import { fetchHomepage, fetchService } from './fetchers';
@@ -127,15 +134,13 @@ import { fetchHomepage, fetchService } from './fetchers';
 const routes =  [
   {
     path: '/',
-    exact: true,
-    component: Homepage,
+    element: <Homepage />,
     // Assign the service fetcher to ensure the initial data is fetched for the homepage
     fetchInitialData: fetchHomepage
   },
   {
     path: '/services/:id',
-    exact: false,
-    component: Service,
+    element: <Service />,
     // Assign the service fetcher to ensure the initial data is fetched for the service page
     fetchInitialData: fetchService
   }
@@ -149,7 +154,8 @@ Data will be need to be fetched server-side and client-side so it's important to
 Update `src/server.js`:
 ```js
 ...
-import { StaticRouter, matchPath } from "react-router-dom";
+import { StaticRouter } from "react-router-dom/server";
+import { matchRoutes } from "react-router";
 import axios from 'axios';
 import routes from './routes';
 import serviceData from './static-data/service-data.json';
@@ -168,17 +174,16 @@ router.get('/api/services/:id', async (req, res) => {
 
 // Handle all routes
 router.get('/*', async (req, res) => {
-    // Use "matchPatch" to match the request path to a route.
-    const currentRoute = routes.find((route) => matchPath(req.url, route)) || {};
-
-    // Get request data for the matching route
-    const requestData = matchPath(req.url, currentRoute);
+    // Use "matchRoutes" to get the current route config
+    const matchingRoutes = matchRoutes(routes, req.url);
+    // Set to first matching route
+    const currentRoute = (matchingRoutes && matchingRoutes[0]) || {};
 
     // Fetch initial page data if the current route has been configured with a data fetcher
     let pageData = {};
 
-    if (currentRoute.fetchInitialData) {
-        pageData = await currentRoute.fetchInitialData(requestData && requestData.params);
+    if (currentRoute.route && currentRoute.route.fetchInitialData) {
+        pageData = await currentRoute.route.fetchInitialData(currentRoute.params);
     }
 
     const data = {
@@ -240,11 +245,13 @@ renderMethod(
 Update `src/components/App/App.jsx`:
 ```js
 ...
-import { Route, Switch, NavLink } from 'react-router-dom';
+import { useRoutes, NavLink } from 'react-router-dom';
 import routes from '../../routes';
 
 function App() {
-    // Use the Switch component to render the first route that matches the request path.
+    // Get output for the first route that matches the request path.
+    const renderRoute = useRoutes(routes);
+
     return (
         <div className="app">
             <Logo className="logo" />
@@ -257,16 +264,7 @@ function App() {
                 </ul>
             </nav>
             <img src={BannerImage} alt="React Demo banner" />
-            <Switch>
-                {routes.map(({ path, exact, component: PageComponent, ...rest }) => (
-                    <Route
-                        key={path}
-                        path={path}
-                        exact={exact}
-                        render={(props) => (<PageComponent {...props} {...rest} />)}
-                    />
-                ))}
-            </Switch>
+            {renderRoute}
         </div>
     );
 }
