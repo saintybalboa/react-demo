@@ -38,12 +38,12 @@ npm install nodemon webpack-dev-server -g
 
 Start the application server for local development:
 ```bash
-npm dev:server
+npm run dev:server
 ```
 
 Open another terminal and startup Webpack dev server for local frontend development:
 ```bash
-npm dev:client
+npm run dev:client
 ```
 
 The React Demo should automatically be opened in the browser: http://localhost:4000/
