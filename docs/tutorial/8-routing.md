@@ -30,7 +30,7 @@ How it works:
 **Todo: remove the dependencies once react router v6 is released**
 Install the following dependencies:
 ```bash
-npm install history react-router-dom@next
+npm install react-router@next react-router-dom@next
 ```
 
 A service page will be created to demonstrate dynamic routing and allow page navigation between the homepage and the service page.
